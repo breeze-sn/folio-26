@@ -104,6 +104,14 @@ a {
   font-size: 0.82rem;
 }
 
+.deploy-note {
+  margin-top: 2rem;
+  text-align: center;
+  color: #e9ecf7;
+  font-size: 0.8rem;
+  letter-spacing: 0.02em;
+}
+
 .work-preview {
   margin-top: 2.4rem;
   display: grid;

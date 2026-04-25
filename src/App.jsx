@@ -103,6 +103,10 @@ export default function App() {
           <p>Follow the process, explore updates, and stay in touch</p>
         </section>
 
+        <section className="deploy-note" data-reveal>
+          <p>Render-ready build updated from src/App.jsx.</p>
+        </section>
+
         <section className="social-grid" data-reveal>
           {socialLinks.map((link) => (
             <a
