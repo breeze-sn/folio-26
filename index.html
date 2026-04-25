@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Folio — Design Portfolio</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <!-- Navigation -->
+    <header class="header" id="header">
+      <nav class="nav container">
+        <a href="#home" class="nav__logo">folio.</a>
+        <ul class="nav__list" id="navList">
+          <li><a href="#home" class="nav__link active">Home</a></li>
+          <li><a href="#work" class="nav__link">Work</a></li>
+          <li><a href="#about" class="nav__link">About</a></li>
+          <li><a href="#contact" class="nav__link">Contact</a></li>
+        </ul>
+        <button class="nav__toggle" id="navToggle" aria-label="Open menu">
+          <span></span><span></span><span></span>
+        </button>
+      </nav>
+    </header>
+
+    <!-- Hero -->
+    <section class="hero section" id="home">
+      <div class="container hero__content">
+        <span class="hero__tag">Design Portfolio</span>
+        <h1 class="hero__title">
+          Crafting&nbsp;<em>meaningful</em><br />design experiences
+        </h1>
+        <p class="hero__subtitle">
+          Product · Web · Brand
+        </p>
+        <div class="hero__cta">
+          <a href="#work" class="btn btn--primary">View My Work</a>
+          <a href="#contact" class="btn btn--outline">Get in Touch</a>
+        </div>
+      </div>
+      <div class="hero__scroll-hint">
+        <span>Scroll</span>
+        <div class="scroll-line"></div>
+      </div>
+    </section>
+
+    <!-- Work / Projects -->
+    <section class="work section" id="work">
+      <div class="container">
+        <div class="section__header">
+          <h2 class="section__title">Selected Work</h2>
+          <p class="section__subtitle">
+            Explore projects across product, web, and brand design.
+          </p>
+        </div>
+
+        <!-- Filter tabs -->
+        <div class="filters" role="tablist" aria-label="Project categories">
+          <button
+            class="filter__btn active"
+            data-filter="all"
+            role="tab"
+            aria-selected="true"
+          >
+            All
+          </button>
+          <button
+            class="filter__btn"
+            data-filter="product"
+            role="tab"
+            aria-selected="false"
+          >
+            Product Design
+          </button>
+          <button
+            class="filter__btn"
+            data-filter="web"
+            role="tab"
+            aria-selected="false"
+          >
+            Web Design
+          </button>
+          <button
+            class="filter__btn"
+            data-filter="brand"
+            role="tab"
+            aria-selected="false"
+          >
+            Brand Design
+          </button>
+        </div>
+
+        <!-- Projects grid -->
+        <div class="projects__grid" id="projectsGrid">
+
+          <!-- Product Design Projects -->
+          <article class="project__card" data-category="product">
+            <div class="project__image" style="--bg: #e8f4fd;">
+              <div class="project__mockup product-mockup-1"></div>
+            </div>
+            <div class="project__info">
+              <span class="project__tag">Product Design</span>
+              <h3 class="project__title">Fintech Dashboard</h3>
+              <p class="project__desc">
+                End-to-end UX design for a personal finance app — user
+                research, wireframes, and high-fidelity prototypes.
+              </p>
+              <a href="#" class="project__link" aria-label="View Fintech Dashboard case study">View Case Study →</a>
+            </div>
+          </article>
+
+          <article class="project__card" data-category="product">
+            <div class="project__image" style="--bg: #f0f7ee;">
+              <div class="project__mockup product-mockup-2"></div>
+            </div>
+            <div class="project__info">
+              <span class="project__tag">Product Design</span>
+              <h3 class="project__title">Health &amp; Wellness App</h3>
+              <p class="project__desc">
+                Designing an intuitive mobile experience that helps users
+                track habits and build healthier routines.
+              </p>
+              <a href="#" class="project__link" aria-label="View Health & Wellness App case study">View Case Study →</a>
+            </div>
+          </article>
+
+          <article class="project__card" data-category="product">
+            <div class="project__image" style="--bg: #fef3ee;">
+              <div class="project__mockup product-mockup-3"></div>
+            </div>
+            <div class="project__info">
+              <span class="project__tag">Product Design</span>
+              <h3 class="project__title">E-commerce Checkout</h3>
+              <p class="project__desc">
+                Redesigning a checkout flow that reduced cart abandonment
+                by 34% through friction removal and trust signals.
+              </p>
+              <a href="#" class="project__link" aria-label="View E-commerce Checkout case study">View Case Study →</a>
+            </div>
+          </article>
+
+          <!-- Web Design Projects -->
+          <article class="project__card" data-category="web">
+            <div class="project__image" style="--bg: #f3eefe;">
+              <div class="project__mockup web-mockup-1"></div>
+            </div>
+            <div class="project__info">
+              <span class="project__tag">Web Design</span>
+              <h3 class="project__title">Creative Agency Site</h3>
+              <p class="project__desc">
+                A bold, scroll-driven website for a creative studio that
+                balances strong typography with immersive visuals.
+              </p>
+              <a href="#" class="project__link" aria-label="View Creative Agency Site case study">View Case Study →</a>
+            </div>
+          </article>
+
+          <article class="project__card" data-category="web">
+            <div class="project__image" style="--bg: #eef6fe;">
+              <div class="project__mockup web-mockup-2"></div>
+            </div>
+            <div class="project__info">
+              <span class="project__tag">Web Design</span>
+              <h3 class="project__title">SaaS Landing Page</h3>
+              <p class="project__desc">
+                Conversion-focused landing page design with A/B-tested
+                hero variants and a clear, scannable hierarchy.
+              </p>
+              <a href="#" class="project__link" aria-label="View SaaS Landing Page case study">View Case Study →</a>
+            </div>
+          </article>
+
+          <article class="project__card" data-category="web">
+            <div class="project__image" style="--bg: #fef8ee;">
+              <div class="project__mockup web-mockup-3"></div>
+            </div>
+            <div class="project__info">
+              <span class="project__tag">Web Design</span>
+              <h3 class="project__title">Portfolio &amp; Blog</h3>
+              <p class="project__desc">
+                Minimal yet expressive personal site design that puts
+                writing and work front and center.
+              </p>
+              <a href="#" class="project__link" aria-label="View Portfolio & Blog case study">View Case Study →</a>
+            </div>
+          </article>
+
+          <!-- Brand Design Projects -->
+          <article class="project__card" data-category="brand">
+            <div class="project__image" style="--bg: #feeef2;">
+              <div class="project__mockup brand-mockup-1"></div>
+            </div>
+            <div class="project__info">
+              <span class="project__tag">Brand Design</span>
+              <h3 class="project__title">Café Branding</h3>
+              <p class="project__desc">
+                Full brand identity for a specialty coffee shop — logo,
+                color system, typography, and packaging design.
+              </p>
+              <a href="#" class="project__link" aria-label="View Café Branding case study">View Case Study →</a>
+            </div>
+          </article>
+
+          <article class="project__card" data-category="brand">
+            <div class="project__image" style="--bg: #eef7f4;">
+              <div class="project__mockup brand-mockup-2"></div>
+            </div>
+            <div class="project__info">
+              <span class="project__tag">Brand Design</span>
+              <h3 class="project__title">Tech Startup Identity</h3>
+              <p class="project__desc">
+                Visual identity system for a B2B SaaS startup — brand
+                strategy, logo, and comprehensive style guide.
+              </p>
+              <a href="#" class="project__link" aria-label="View Tech Startup Identity case study">View Case Study →</a>
+            </div>
+          </article>
+
+          <article class="project__card" data-category="brand">
+            <div class="project__image" style="--bg: #f5eef8;">
+              <div class="project__mockup brand-mockup-3"></div>
+            </div>
+            <div class="project__info">
+              <span class="project__tag">Brand Design</span>
+              <h3 class="project__title">Fashion Label Rebrand</h3>
+              <p class="project__desc">
+                Repositioning and rebranding a sustainable fashion label
+                to appeal to a younger, eco-conscious audience.
+              </p>
+              <a href="#" class="project__link" aria-label="View Fashion Label Rebrand case study">View Case Study →</a>
+            </div>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- About -->
+    <section class="about section" id="about">
+      <div class="container about__inner">
+        <div class="about__visual">
+          <div class="about__avatar">
+            <div class="avatar__ring"></div>
+            <div class="avatar__initials">FD</div>
+          </div>
+          <div class="about__stats">
+            <div class="stat">
+              <span class="stat__number">5+</span>
+              <span class="stat__label">Years Experience</span>
+            </div>
+            <div class="stat">
+              <span class="stat__number">60+</span>
+              <span class="stat__label">Projects Delivered</span>
+            </div>
+            <div class="stat">
+              <span class="stat__number">3</span>
+              <span class="stat__label">Design Disciplines</span>
+            </div>
+          </div>
+        </div>
+        <div class="about__text">
+          <h2 class="section__title">About Me</h2>
+          <p>
+            I'm a multidisciplinary designer who bridges the gap between
+            beautiful aesthetics and meaningful user experiences. I work across
+            <strong>product design</strong>, <strong>web design</strong>, and
+            <strong>brand identity</strong> — bringing a holistic perspective to
+            every project.
+          </p>
+          <p>
+            My process starts with deep empathy for users and stakeholders,
+            followed by rigorous research, iterative prototyping, and refined
+            final delivery. I believe great design is invisible: it just works.
+          </p>
+          <div class="skills">
+            <span class="skill__pill">Figma</span>
+            <span class="skill__pill">Adobe XD</span>
+            <span class="skill__pill">Illustrator</span>
+            <span class="skill__pill">Photoshop</span>
+            <span class="skill__pill">Prototyping</span>
+            <span class="skill__pill">User Research</span>
+            <span class="skill__pill">Design Systems</span>
+            <span class="skill__pill">HTML / CSS</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact -->
+    <section class="contact section" id="contact">
+      <div class="container">
+        <div class="section__header">
+          <h2 class="section__title">Let's Work Together</h2>
+          <p class="section__subtitle">
+            Have a project in mind? I'd love to hear about it.
+          </p>
+        </div>
+        <form class="contact__form" id="contactForm" novalidate>
+          <div class="form__row">
+            <div class="form__group">
+              <label for="name">Name</label>
+              <input type="text" id="name" name="name" placeholder="Your name" required />
+            </div>
+            <div class="form__group">
+              <label for="email">Email</label>
+              <input type="email" id="email" name="email" placeholder="your@email.com" required />
+            </div>
+          </div>
+          <div class="form__group">
+            <label for="subject">Subject</label>
+            <input type="text" id="subject" name="subject" placeholder="Project type or inquiry" />
+          </div>
+          <div class="form__group">
+            <label for="message">Message</label>
+            <textarea id="message" name="message" rows="5" placeholder="Tell me about your project…" required></textarea>
+          </div>
+          <button type="submit" class="btn btn--primary btn--full">Send Message</button>
+          <p class="form__feedback" id="formFeedback" role="status" aria-live="polite"></p>
+        </form>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="container footer__inner">
+        <a href="#home" class="footer__logo">folio.</a>
+        <p class="footer__copy">© <span id="year"></span> — All rights reserved</p>
+        <div class="footer__socials">
+          <a href="#" aria-label="Dribbble" class="social__link">Dribbble</a>
+          <a href="#" aria-label="Behance" class="social__link">Behance</a>
+          <a href="#" aria-label="LinkedIn" class="social__link">LinkedIn</a>
+        </div>
+      </div>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>
