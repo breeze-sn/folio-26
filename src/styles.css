@@ -20,7 +20,7 @@ body,
 body {
   background: radial-gradient(circle at 50% -20%, #0d1130 0%, var(--bg) 45%);
   color: var(--text);
-  font-family: "Space Grotesk", sans-serif;
+  font-family: "Aoboshi One", serif;
 }
 
 p,
@@ -47,6 +47,7 @@ a {
   padding-top: 1.2rem;
   font-size: 0.62rem;
   color: #d5d9e8;
+  font-family: "Krona One", sans-serif;
 }
 
 .hero-stage {
@@ -62,12 +63,14 @@ a {
   letter-spacing: 0.08em;
   line-height: 0.9;
   font-weight: 700;
+  font-family: "Krona One", sans-serif;
 }
 
 .hero-stage p {
   margin-top: 0.25rem;
   color: var(--muted);
   font-size: clamp(1rem, 3.5vw, 2rem);
+  font-family: "Aoboshi One", serif;
 }
 
 .scroll-mark {
@@ -95,6 +98,7 @@ a {
 .connect h2 {
   font-size: clamp(2rem, 5vw, 2.9rem);
   letter-spacing: 0.02em;
+  font-family: "Krona One", sans-serif;
 }
 
 .evolve p,
@@ -102,6 +106,7 @@ a {
   margin-top: 0.3rem;
   color: var(--soft);
   font-size: 0.82rem;
+  font-family: "Aoboshi One", serif;
 }
 
 .deploy-note {
@@ -110,6 +115,7 @@ a {
   color: #e9ecf7;
   font-size: 0.8rem;
   letter-spacing: 0.02em;
+  font-family: "Aoboshi One", serif;
 }
 
 .work-preview {
@@ -125,6 +131,7 @@ a {
   margin-top: 0.45rem;
   font-size: 0.78rem;
   color: #d6dbed;
+  font-family: "Aoboshi One", serif;
 }
 
 .work-tile {
@@ -161,6 +168,7 @@ a {
   text-align: center;
   color: #d6dbed;
   font-size: 0.78rem;
+  font-family: "Aoboshi One", serif;
 }
 
 .tile-gdg {
@@ -194,12 +202,14 @@ a {
 
 .social-card span {
   font-size: 0.95rem;
+  font-family: "Krona One", sans-serif;
 }
 
 .social-card small {
   font-size: 0.62rem;
   opacity: 0.9;
   align-self: flex-start;
+  font-family: "Aoboshi One", serif;
 }
 
 .social-instagram {
@@ -239,6 +249,7 @@ a {
   text-align: center;
   color: #d6dbed;
   font-size: 0.82rem;
+  font-family: "Aoboshi One", serif;
 }
 
 [data-reveal] {
