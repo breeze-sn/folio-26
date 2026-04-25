@@ -1,4 +1,14 @@
 import { useEffect } from "react";
+import {
+  SiBehance,
+  SiInstagram,
+  SiMedium,
+  SiPinterest,
+  SiReddit,
+  SiSpotify,
+  SiX
+} from "react-icons/si";
+import { FaLinkedinIn } from "react-icons/fa";
 import folio25Image from "./assets/images/cards/folio25.svg";
 import gdgImage from "./assets/images/cards/gdg.svg";
 import riftImage from "./assets/images/cards/rift.svg";
@@ -25,14 +35,62 @@ const pastWork = [
 ];
 
 const socialLinks = [
-  { label: "Instagram", style: "social-instagram", icon: "IG" },
-  { label: "LinkedIn", style: "social-linkedin", icon: "in" },
-  { label: "Medium", style: "social-medium", icon: "M" },
-  { label: "Pinterest", style: "social-pinterest", icon: "P" },
-  { label: "Spotify", style: "social-spotify", icon: "S" },
-  { label: "X", style: "social-x", icon: "X" },
-  { label: "Behance", style: "social-behance", icon: "Be" },
-  { label: "Reddit", style: "social-reddit", icon: "R" }
+  {
+    label: "Instagram",
+    style: "social-instagram",
+    icon: SiInstagram,
+    span: "span-2",
+    href: "https://instagram.com/simran.nagekar"
+  },
+  {
+    label: "LinkedIn",
+    style: "social-linkedin",
+    icon: FaLinkedinIn,
+    span: "span-4",
+    href: "https://linkedin.com/in/simransn"
+  },
+  {
+    label: "Medium",
+    style: "social-medium",
+    icon: SiMedium,
+    span: "span-2",
+    href: "https://medium.com/@breezesn"
+  },
+  {
+    label: "Pinterest",
+    style: "social-pinterest",
+    icon: SiPinterest,
+    span: "span-4",
+    href: "https://in.pinterest.com/simran_nagekar"
+  },
+  {
+    label: "Spotify",
+    style: "social-spotify",
+    icon: SiSpotify,
+    span: "span-4",
+    href: "ttps://https://open.spotify.com/user/31trbfvupfmba4dkc4o445srjxfa"
+  },
+  {
+    label: "X",
+    style: "social-x",
+    icon: SiX,
+    span: "span-2",
+    href: "https://twitter.com/s1mran0"
+  },
+  {
+    label: "Behance",
+    style: "social-behance",
+    icon: SiBehance,
+    span: "span-4",
+    href: "https://behance.net/simrannagekar"
+  },
+  {
+    label: "Reddit",
+    style: "social-reddit",
+    icon: SiReddit,
+    span: "span-2",
+    href: "https://reddit.com/user/BreezieXD"
+  }
 ];
 
 export default function App() {
@@ -60,9 +118,9 @@ export default function App() {
 
   return (
     <div className="under-construction-page">
-      <header className="micro-header" data-reveal>
-        <p>Simran Nagakar</p>
-      </header>
+      <nav className="navbar" aria-label="Primary" data-reveal>
+        <p>Simran Nagekar</p>
+      </nav>
 
       <main>
         <section className="hero-stage" data-reveal>
@@ -103,27 +161,25 @@ export default function App() {
           <p>Follow the process, explore updates, and stay in touch</p>
         </section>
 
-        <section className="deploy-note" data-reveal>
-          <p>Render-ready build updated from src/App.jsx.</p>
-        </section>
-
-        <section className="social-grid" data-reveal>
+        <section className="social-grid">
           {socialLinks.map((link) => (
             <a
               key={link.label}
-              className={`social-card ${link.style}`}
-              href="#"
+              className={`social-card ${link.style} ${link.span}`}
+              href={link.href}
               aria-label={link.label}
+              target="_blank"
+              rel="noreferrer"
             >
+              <link.icon className="social-logo" aria-hidden="true" />
               <span>{link.label}</span>
-              <small>{link.icon}</small>
             </a>
           ))}
         </section>
       </main>
 
       <footer className="site-footer" data-reveal>
-        <p>© folio'26</p>
+        <p>folio'26</p>
       </footer>
     </div>
   );

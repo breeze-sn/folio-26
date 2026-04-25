@@ -4,6 +4,8 @@
   --muted: #8c95b0;
   --line: #7f89ff;
   --soft: #5d6cab;
+  --font-ui: "Krona One", sans-serif;
+  --font-copy: "Aoboshi One", serif;
 }
 
 * {
@@ -20,7 +22,9 @@ body,
 body {
   background: radial-gradient(circle at 50% -20%, #0d1130 0%, var(--bg) 45%);
   color: var(--text);
-  font-family: "Aoboshi One", serif;
+  font-family: var(--font-ui);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
 p,
@@ -36,18 +40,18 @@ a {
 }
 
 .under-construction-page {
-  width: min(780px, 92vw);
+  width: min(940px, 92vw);
   margin: 0 auto;
   padding-bottom: 3.5rem;
 }
 
-.micro-header {
+.navbar {
   display: flex;
   justify-content: center;
   padding-top: 1.2rem;
   font-size: 0.62rem;
   color: #d5d9e8;
-  font-family: "Krona One", sans-serif;
+  font-family: var(--font-ui);
 }
 
 .hero-stage {
@@ -63,14 +67,14 @@ a {
   letter-spacing: 0.08em;
   line-height: 0.9;
   font-weight: 700;
-  font-family: "Krona One", sans-serif;
+  font-family: var(--font-ui);
 }
 
 .hero-stage p {
   margin-top: 0.25rem;
   color: var(--muted);
   font-size: clamp(1rem, 3.5vw, 2rem);
-  font-family: "Aoboshi One", serif;
+  font-family: var(--font-copy);
 }
 
 .scroll-mark {
@@ -98,7 +102,7 @@ a {
 .connect h2 {
   font-size: clamp(2rem, 5vw, 2.9rem);
   letter-spacing: 0.02em;
-  font-family: "Krona One", sans-serif;
+  font-family: var(--font-ui);
 }
 
 .evolve p,
@@ -106,7 +110,7 @@ a {
   margin-top: 0.3rem;
   color: var(--soft);
   font-size: 0.82rem;
-  font-family: "Aoboshi One", serif;
+  font-family: var(--font-copy);
 }
 
 .deploy-note {
@@ -115,7 +119,7 @@ a {
   color: #e9ecf7;
   font-size: 0.8rem;
   letter-spacing: 0.02em;
-  font-family: "Aoboshi One", serif;
+  font-family: var(--font-copy);
 }
 
 .work-preview {
@@ -131,7 +135,7 @@ a {
   margin-top: 0.45rem;
   font-size: 0.78rem;
   color: #d6dbed;
-  font-family: "Aoboshi One", serif;
+  font-family: var(--font-copy);
 }
 
 .work-tile {
@@ -168,7 +172,7 @@ a {
   text-align: center;
   color: #d6dbed;
   font-size: 0.78rem;
-  font-family: "Aoboshi One", serif;
+  font-family: var(--font-copy);
 }
 
 .tile-gdg {
@@ -180,19 +184,22 @@ a {
 }
 
 .social-grid {
-  margin-top: 2rem;
+  margin-top: 2.2rem;
   display: grid;
-  grid-template-columns: 1fr 1.8fr 1fr 1.8fr;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
   gap: 0.85rem;
+  opacity: 1;
+  transform: none;
 }
 
 .social-card {
-  height: 86px;
-  padding: 0.7rem;
+  min-height: 132px;
+  padding: 0.85rem 0.9rem;
   border-radius: 4px;
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: flex-end;
+  position: relative;
   transition: transform 180ms ease;
 }
 
@@ -202,14 +209,23 @@ a {
 
 .social-card span {
   font-size: 0.95rem;
-  font-family: "Krona One", sans-serif;
+  font-family: var(--font-copy);
 }
 
-.social-card small {
-  font-size: 0.62rem;
-  opacity: 0.9;
-  align-self: flex-start;
-  font-family: "Aoboshi One", serif;
+.social-logo {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  width: 1.02rem;
+  height: 1.02rem;
+}
+
+.span-2 {
+  grid-column: span 2;
+}
+
+.span-4 {
+  grid-column: span 4;
 }
 
 .social-instagram {
@@ -249,7 +265,7 @@ a {
   text-align: center;
   color: #d6dbed;
   font-size: 0.82rem;
-  font-family: "Aoboshi One", serif;
+  font-family: var(--font-copy);
 }
 
 [data-reveal] {
@@ -284,13 +300,27 @@ a {
   }
 
   .social-grid {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+
+  .span-2,
+  .span-4 {
+    grid-column: span 3;
   }
 }
 
 @media (max-width: 460px) {
   .social-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .span-2,
+  .span-4 {
+    grid-column: span 2;
+  }
+
+  .social-card {
+    min-height: 104px;
   }
 
   .scroll-mark {
