@@ -68,7 +68,7 @@ const socialLinks = [
     style: "social-spotify",
     icon: SiSpotify,
     span: "span-4",
-    href: "ttps://https://open.spotify.com/user/31trbfvupfmba4dkc4o445srjxfa"
+    href: "https://open.spotify.com/user/31trbfvupfmba4dkc4o445srjxfa"
   },
   {
     label: "X",

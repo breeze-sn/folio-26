@@ -1,7 +1,7 @@
 {
-  "name": "folio'26",
+  "name": "Folio'26",
   "version": "1.0.0",
-  "description": "React portfolio starter template",
+  "description": "Portfolio site designed to present projects.",
   "private": true,
   "scripts": {
     "dev": "vite",
@@ -10,7 +10,7 @@
     "start": "npm run preview"
   },
   "keywords": [],
-  "author": "",
+  "author": "Simran Nagekar",
   "license": "ISC",
   "type": "module",
   "dependencies": {
