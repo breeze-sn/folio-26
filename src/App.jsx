@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   SiBehance,
   SiInstagram,
@@ -18,19 +18,22 @@ const pastWork = [
     title: "Folio'25 | Simran Nagakar",
     style: "tile-portfolio",
     image: folio25Image,
-    alt: "Folio 25 portfolio cover"
+    alt: "Folio 25 portfolio cover",
+    href: "https://www.simrann.dev"
   },
   {
     title: "GDG Community Design & Identity",
     style: "tile-gdg",
     image: gdgImage,
-    alt: "GDG community design showcase"
+    alt: "GDG community design showcase",
+    href: "https://www.behance.net/gallery/238530857/GDGoC-REVA-University-Community-Design-Identity"
   },
   {
     title: "RIFT Design",
     style: "tile-rift",
     image: riftImage,
-    alt: "RIFT design showcase"
+    alt: "RIFT design showcase",
+    href: "https://www.revarift.tech"
   }
 ];
 
@@ -94,93 +97,217 @@ const socialLinks = [
 ];
 
 export default function App() {
+  const [activeSection, setActiveSection] = useState(0);
+  const [showNav, setShowNav] = useState(true);
+  const isTransitioningRef = useRef(false);
+
   useEffect(() => {
-    const revealItems = document.querySelectorAll("[data-reveal]");
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (!entry.isIntersecting) {
-            return;
-          }
+    return () => {
+      document.body.style.overflow = previousOverflow;
+    };
+  }, []);
 
-          entry.target.classList.add("is-visible");
-          observer.unobserve(entry.target);
-        });
-      },
-      { threshold: 0.2 }
-    );
+  useEffect(() => {
+    const sectionsCount = 3;
 
-    revealItems.forEach((item) => observer.observe(item));
+    const goToSection = (direction) => {
+      if (isTransitioningRef.current) {
+        return;
+      }
 
-    return () => observer.disconnect();
+      setActiveSection((current) => {
+        const next = Math.max(0, Math.min(sectionsCount - 1, current + direction));
+        if (next === current) {
+          return current;
+        }
+
+        isTransitioningRef.current = true;
+        window.setTimeout(() => {
+          isTransitioningRef.current = false;
+        }, 720);
+
+        if (direction < 0 || next === 0) {
+          setShowNav(true);
+        } else {
+          setShowNav(false);
+        }
+
+        return next;
+      });
+    };
+
+    const onWheel = (event) => {
+      if (Math.abs(event.deltaY) < 8) {
+        return;
+      }
+
+      event.preventDefault();
+      goToSection(event.deltaY > 0 ? 1 : -1);
+    };
+
+    const onKeyDown = (event) => {
+      if (["ArrowDown", "PageDown", " "].includes(event.key)) {
+        event.preventDefault();
+        goToSection(1);
+      }
+
+      if (["ArrowUp", "PageUp"].includes(event.key)) {
+        event.preventDefault();
+        goToSection(-1);
+      }
+    };
+
+    let touchStartY = 0;
+
+    const onTouchStart = (event) => {
+      touchStartY = event.touches[0].clientY;
+    };
+
+    const onTouchEnd = (event) => {
+      const delta = touchStartY - event.changedTouches[0].clientY;
+      if (Math.abs(delta) < 30) {
+        return;
+      }
+
+      goToSection(delta > 0 ? 1 : -1);
+    };
+
+    window.addEventListener("wheel", onWheel, { passive: false });
+    window.addEventListener("keydown", onKeyDown);
+    window.addEventListener("touchstart", onTouchStart, { passive: true });
+    window.addEventListener("touchend", onTouchEnd, { passive: true });
+
+    return () => {
+      window.removeEventListener("wheel", onWheel);
+      window.removeEventListener("keydown", onKeyDown);
+      window.removeEventListener("touchstart", onTouchStart);
+      window.removeEventListener("touchend", onTouchEnd);
+    };
+  }, []);
+
+  useEffect(() => {
+    const onPointerDown = (event) => {
+      if (event.pointerType !== "mouse") {
+        return;
+      }
+
+      const burst = document.createElement("div");
+      burst.className = "click-burst";
+      burst.style.left = `${event.clientX}px`;
+      burst.style.top = `${event.clientY}px`;
+
+      for (let index = 0; index < 8; index += 1) {
+        const ray = document.createElement("span");
+        ray.className = "click-burst-ray";
+        ray.style.setProperty("--angle", `${index * 45}deg`);
+        ray.style.setProperty("--ray-length", index % 2 === 0 ? "22px" : "13px");
+        burst.appendChild(ray);
+      }
+
+      document.body.appendChild(burst);
+
+      window.setTimeout(() => {
+        burst.remove();
+      }, 520);
+    };
+
+    window.addEventListener("pointerdown", onPointerDown);
+
+    return () => {
+      window.removeEventListener("pointerdown", onPointerDown);
+    };
   }, []);
 
   return (
     <div className="under-construction-page">
-      <nav className="navbar" aria-label="Primary" data-reveal>
+      <nav className={`navbar ${showNav ? "is-shown" : "is-hidden"}`} aria-label="Primary">
         <p>Simran Nagekar</p>
       </nav>
 
-      <main>
-        <section className="hero-stage" data-reveal>
-          <h1>WEBSITE</h1>
+      <main className="slides-viewport">
+        <div className="slides-track" style={{ transform: `translate3d(0, -${activeSection * 100}vh, 0)` }}>
+          <section className={`hero-stage snap-section ${activeSection === 0 ? "is-active" : ""}`}>
+          <h1>PORTFOLIO</h1>
           <p>Under Construction</p>
-          <div className="scroll-mark" aria-hidden="true" />
-          <span>scroll down</span>
-        </section>
 
-        <section className="evolve" data-reveal>
-          <h2>While this evolves</h2>
-          <p>
-            Explore what already exists, a glimpse into my earlier work and
-            creative journey.
-          </p>
-        </section>
-
-        <section className="work-preview" data-reveal>
-          <article className={`work-tile ${pastWork[0].style}`}>
-            <img src={pastWork[0].image} alt={pastWork[0].alt} className="work-image" />
-          </article>
-          <p>{pastWork[0].title}</p>
-
-          <div className="work-grid-two">
-            {pastWork.slice(1).map((item) => (
-              <div key={item.title} className="work-grid-item">
-                <article className={`work-tile ${item.style}`}>
-                  <img src={item.image} alt={item.alt} className="work-image" />
-                </article>
-                <p>{item.title}</p>
-              </div>
-            ))}
+          <div className="scroll-cue" aria-hidden="true">
+            <div className="scroll-mark" />
+            <span>scroll down</span>
           </div>
-        </section>
+          </section>
 
-        <section className="connect" data-reveal>
-          <h2>Let's connect</h2>
-          <p>Follow the process, explore updates, and stay in touch</p>
-        </section>
+          <section className={`projects-section snap-section ${activeSection === 1 ? "is-active" : ""}`}>
+            <div className="section-heading">
+              <h2>While this evolves</h2>
+              <p>Explore what already exists; a glimpse into my earlier work and creative journey.</p>
+            </div>
 
-        <section className="social-grid">
-          {socialLinks.map((link) => (
-            <a
-              key={link.label}
-              className={`social-card ${link.style} ${link.span}`}
-              href={link.href}
-              aria-label={link.label}
-              target="_blank"
-              rel="noreferrer"
-            >
-              <link.icon className="social-logo" aria-hidden="true" />
-              <span>{link.label}</span>
-            </a>
-          ))}
-        </section>
+            <div className="work-preview">
+              <a
+                className="work-link"
+                href={pastWork[0].href}
+                target="_blank"
+                rel="noreferrer"
+                aria-label={pastWork[0].title}
+              >
+                <article className={`work-tile ${pastWork[0].style}`}>
+                  <img src={pastWork[0].image} alt={pastWork[0].alt} className="work-image" />
+                </article>
+                <p>{pastWork[0].title}</p>
+              </a>
+
+              <div className="work-grid-two">
+                {pastWork.slice(1).map((item) => (
+                  <div key={item.title} className="work-grid-item">
+                    <a
+                      className="work-link"
+                      href={item.href}
+                      target="_blank"
+                      rel="noreferrer"
+                      aria-label={item.title}
+                    >
+                      <article className={`work-tile ${item.style}`}>
+                        <img src={item.image} alt={item.alt} className="work-image" />
+                      </article>
+                      <p>{item.title}</p>
+                    </a>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+
+          <section className={`socials-section snap-section ${activeSection === 2 ? "is-active" : ""}`}>
+            <div className="section-heading">
+              <h2>Let's Connect</h2>
+              <p>Follow the process, explore updates, and stay in touch.</p>
+            </div>
+
+            <div className="social-grid">
+              {socialLinks.map((link) => (
+                <a
+                  key={link.label}
+                  className={`social-card ${link.style} ${link.span}`}
+                  href={link.href}
+                  aria-label={link.label}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <link.icon className="social-logo" aria-hidden="true" />
+                  <span>{link.label}</span>
+                </a>
+              ))}
+            </div>
+
+            <footer className="site-footer">
+              <p>© folio'26</p>
+            </footer>
+          </section>
+        </div>
       </main>
-
-      <footer className="site-footer" data-reveal>
-        <p>folio'26</p>
-      </footer>
     </div>
   );
 }
