@@ -19,7 +19,7 @@ const pastWork = [
     style: "tile-portfolio",
     image: folio25Image,
     alt: "Folio 25 portfolio cover",
-    href: "https://www.simrann.dev"
+    href: "https://www.behance.net/simrannagekar"
   },
   {
     title: "GDG Community Design & Identity",
@@ -203,7 +203,7 @@ export default function App() {
         const ray = document.createElement("span");
         ray.className = "click-burst-ray";
         ray.style.setProperty("--angle", `${index * 45}deg`);
-        ray.style.setProperty("--ray-length", index % 2 === 0 ? "22px" : "13px");
+        ray.style.setProperty("--ray-length", index % 2 === 0 ? "14px" : "8px");
         burst.appendChild(ray);
       }
 
@@ -211,7 +211,7 @@ export default function App() {
 
       window.setTimeout(() => {
         burst.remove();
-      }, 520);
+      }, 390);
     };
 
     window.addEventListener("pointerdown", onPointerDown);

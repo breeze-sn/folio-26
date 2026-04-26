@@ -50,11 +50,11 @@ body {
   width: var(--ray-length);
   height: 2px;
   border-radius: 999px;
-  background: #ffffff;
+  background: #bbbbbb;
   opacity: 0;
   transform-origin: left center;
-  transform: rotate(var(--angle)) translateX(7px) scaleX(0.2);
-  animation: clickBurstRay 480ms cubic-bezier(0.16, 0.84, 0.44, 1) forwards;
+  transform: rotate(var(--angle)) translateX(3px) scaleX(0.2);
+  animation: clickBurstRay 350ms cubic-bezier(0.16, 0.84, 0.44, 1) forwards;
 }
 
 p,
@@ -243,11 +243,11 @@ main {
 }
 
 .work-link:hover {
-  filter: grayscale(1) brightness(0.55) contrast(1.12);
+  filter: grayscale(1) brightness(0.5) contrast(1.8);
 }
 
 .work-link:focus-visible {
-  filter: grayscale(1) brightness(0.55) contrast(1.12);
+  filter: grayscale(1) brightness(0.5) contrast(1.8);
   outline: 1px solid #9eabff;
   outline-offset: 6px;
 }
@@ -320,11 +320,11 @@ main {
 }
 
 .social-card:hover {
-  filter: grayscale(1) brightness(0.55) contrast(1.12);
+  filter: grayscale(1) brightness(0.5) contrast(1.8);
 }
 
 .social-card:focus-visible {
-  filter: grayscale(1) brightness(0.55) contrast(1.12);
+  filter: grayscale(1) brightness(0.5) contrast(1.8);
 }
 
 .social-card span {
@@ -408,7 +408,7 @@ main {
 @keyframes clickBurstRay {
   0% {
     opacity: 0;
-    transform: rotate(var(--angle)) translateX(5px) scaleX(0.2);
+    transform: rotate(var(--angle)) translateX(2px) scaleX(0.2);
   }
 
   18% {
@@ -417,7 +417,7 @@ main {
 
   100% {
     opacity: 0;
-    transform: rotate(var(--angle)) translateX(13px) scaleX(1);
+    transform: rotate(var(--angle)) translateX(6px) scaleX(0.82);
   }
 }
 
