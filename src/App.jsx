@@ -22,11 +22,11 @@ const pastWork = [
     href: "https://www.behance.net/simrannagekar"
   },
   {
-    title: "GDG Community Design & Identity",
+    title: "ByteMe",
     style: "tile-gdg",
     image: gdgImage,
-    alt: "GDG community design showcase",
-    href: "https://www.behance.net/gallery/238530857/GDGoC-REVA-University-Community-Design-Identity"
+    alt: "ByteMe project showcase",
+    href: "https://breeze-sn.github.io/ByteMe/"
   },
   {
     title: "RIFT Design",
@@ -96,6 +96,37 @@ const socialLinks = [
   }
 ];
 
+const nextProjects = [
+  {
+    title: "GDG Community Design & Identity",
+    style: "tile-gdg",
+    image: null,
+    alt: "GDG project cover",
+    href: "https://www.behance.net/gallery/238530857/GDGoC-REVA-University-Community-Design-Identity"
+  },
+  {
+    title: "Quick Air",
+    style: "tile-gdg",
+    image: null,
+    alt: "Quick Air project cover",
+    href: "https://www.behance.net/gallery/230187655/Quick-Air"
+  },
+  {
+    title: "Ballback",
+    style: "tile-gdg",
+    image: null,
+    alt: "Ballback project cover",
+    href: "https://github.com/breeze-sn/Ballback"
+  },
+  {
+    title: "OXO",
+    style: "tile-gdg",
+    image: null,
+    alt: "OXO project cover",
+    href: "https://oxo.figma.site"
+  }
+];
+
 export default function App() {
   const [activeSection, setActiveSection] = useState(0);
   const [showNav, setShowNav] = useState(true);
@@ -111,7 +142,7 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    const sectionsCount = 3;
+    const sectionsCount = 4;
 
     const goToSection = (direction) => {
       if (isTransitioningRef.current) {
@@ -280,7 +311,39 @@ export default function App() {
             </div>
           </section>
 
-          <section className={`socials-section snap-section ${activeSection === 2 ? "is-active" : ""}`}>
+          <section className={`more-projects-section snap-section ${activeSection === 2 ? "is-active" : ""}`}>
+            <div className="section-heading">
+              <h2>More Projects</h2>
+              <p>Additional builds from recent collaborations and personal experiments.</p>
+            </div>
+
+            <div className="more-projects-grid">
+              {nextProjects.map((project) => (
+                <div key={project.title} className="work-grid-item">
+                  <a
+                    className="work-link"
+                    href={project.href}
+                    target="_blank"
+                    rel="noreferrer"
+                    aria-label={project.title}
+                  >
+                    <article className={`work-tile ${project.style}`}>
+                      {project.image ? (
+                        <img src={project.image} alt={project.alt} className="work-image" />
+                      ) : (
+                        <div className="work-image-placeholder" aria-hidden="true">
+                          Image
+                        </div>
+                      )}
+                    </article>
+                    <p>{project.title}</p>
+                  </a>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          <section className={`socials-section snap-section ${activeSection === 3 ? "is-active" : ""}`}>
             <div className="section-heading">
               <h2>Let's Connect</h2>
               <p>Follow the process, explore updates, and stay in touch.</p>
