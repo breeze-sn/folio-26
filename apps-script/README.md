@@ -1,0 +1,35 @@
+# Google Apps Script Contact Form Backend
+
+Use this Apps Script to store contact form submissions from the portfolio site into Google Sheets.
+
+## Setup
+
+1. Create a Google Sheet.
+2. Open **Extensions > Apps Script**.
+3. Paste the contents of `Code.gs` into the Apps Script editor.
+4. In **Project Settings > Script Properties**, set:
+   - `SPREADSHEET_ID` = your Google Sheet ID
+   - `SHEET_NAME` = optional, defaults to `Contact Responses`
+5. Deploy the script as a **Web app**.
+   - Execute as: **Me**
+   - Who has access: **Anyone**
+6. Copy the web app URL and add it to your frontend environment as `VITE_APPS_SCRIPT_URL`.
+
+## Frontend env example
+
+Create a `.env` file at the project root:
+
+```bash
+VITE_APPS_SCRIPT_URL=https://script.google.com/macros/s/YOUR_DEPLOYMENT_ID/exec
+```
+
+## Expected fields
+
+The form sends:
+
+- `name`
+- `email`
+- `message`
+- `source`
+
+The script stores them with a timestamp in the sheet.
