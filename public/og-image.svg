@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
+  <title id="title">Simran Nagekar Portfolio</title>
+  <desc id="desc">Frontend developer and designer portfolio preview</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0b102a" />
+      <stop offset="100%" stop-color="#1014FF" />
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)" rx="48" />
+  <circle cx="1010" cy="130" r="120" fill="rgba(255,255,255,0.08)" />
+  <circle cx="180" cy="500" r="160" fill="rgba(255,255,255,0.06)" />
+  <text x="80" y="190" fill="#ffffff" font-family="Arial, Helvetica, sans-serif" font-size="68" font-weight="700">Simran Nagekar</text>
+  <text x="80" y="270" fill="#dce1ff" font-family="Arial, Helvetica, sans-serif" font-size="34">Frontend Developer &amp; Designer</text>
+  <text x="80" y="360" fill="#ffffff" font-family="Arial, Helvetica, sans-serif" font-size="26">Portfolios • Interactive Web • Product Design</text>
+  <text x="80" y="430" fill="#dce1ff" font-family="Arial, Helvetica, sans-serif" font-size="22">simransn.tech</text>
+</svg>
