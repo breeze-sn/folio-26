@@ -5,16 +5,20 @@ export default function Services() {
   const expertiseItems = [
     "Game Design",
     "Game Testing",
+    "Visual Design",
     "Product Design",
     "Web Design",
     "UX Research",
   ];
 
   const toolBoxItems = [
+    "Figma",
+    "Procreate",
+    "Unity",
+    "Adobe Illustrator",
     "JavaScript",
     "HTML",
     "CSS",
-    "Figma",
     "GSAP",
     "TailwindCSS",
     "ReactJS",
@@ -26,7 +30,7 @@ export default function Services() {
       <div className="space-y-14">
         <ServiceUi
           title="my expertises."
-          description="I create immersive digital experiences through design, 
+          description="I create experiences through design, 
           development, and a little bit of creative chaos, crafting visuals, 
           interactions, and products that feel meaningful, 
           and hopefully make people go &apos;yo, this is cool.&apos;"
