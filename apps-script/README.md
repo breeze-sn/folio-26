@@ -12,6 +12,7 @@ Use this Apps Script to store contact form submissions from the portfolio site i
    - Execute as: **Me**
    - Who has access: **Anyone**
 6. Copy the web app URL and add it to your frontend environment as `VITE_APPS_SCRIPT_URL`.
+7. Redeploy the web app any time `Code.gs` changes; the live URL keeps serving the last deployed version.
 
 ## Frontend env example
 
@@ -31,3 +32,5 @@ The form sends:
 - `source`
 
 The script stores them with a timestamp in the sheet.
+
+It also emails each submission to `nagekarsimran@outlook.com`.

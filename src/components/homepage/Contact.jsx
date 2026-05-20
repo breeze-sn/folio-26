@@ -14,7 +14,6 @@ export default function Contact() {
   const body = useRef(null)
   const contactSection = useRef(null)
   const formRef = useRef(null)
-  const hasSubmittedRef = useRef(false)
 
   useEffect(() => {
     ScrollTrigger.create({
@@ -41,25 +40,34 @@ export default function Contact() {
     return () => clearInterval(intervalId);
   });
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
     if (!appsScriptUrl) {
-      event.preventDefault();
       setSubmissionStatus("error");
       return;
     }
 
-    hasSubmittedRef.current = true;
+    const formData = new FormData(event.currentTarget);
+
     setSubmissionStatus("sending");
-  };
 
-  const handleFrameLoad = () => {
-    if (!hasSubmittedRef.current) {
-      return;
+    try {
+      const response = await fetch(appsScriptUrl, {
+        method: "POST",
+        body: new URLSearchParams(formData),
+      });
+
+      if (!response.ok && response.type !== "opaqueredirect") {
+        throw new Error(`Request failed with status ${response.status}`);
+      }
+
+      formRef.current?.reset();
+      setSubmissionStatus("success");
+    } catch (error) {
+      console.error(error);
+      setSubmissionStatus("error");
     }
-
-    hasSubmittedRef.current = false;
-    formRef.current?.reset();
-    setSubmissionStatus("success");
   };
 
   return (
@@ -83,7 +91,6 @@ export default function Contact() {
             autoComplete="off"
             className="mt-10 font-grotesk"
             method="POST" 
-            target="contact-submit-frame"
             onSubmit={handleSubmit}
           >
             <input type="hidden" name="form-name" value="contact"/>
@@ -159,7 +166,6 @@ export default function Contact() {
             name="contact-submit-frame"
             title="Contact form submission frame"
             className="hidden"
-            onLoad={handleFrameLoad}
           />
         </div>
         <div className="col-span-2 grid grid-cols-1 gap-x-4 gap-y-8 text-accent-300 sm:grid-cols-2 sm:gap-y-0 md:grid-cols-1">

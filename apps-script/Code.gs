@@ -19,6 +19,7 @@ function doPost(e) {
     const source = (params.source || "portfolio-contact").trim();
 
     sheet.appendRow([timestamp, name, email, message, source]);
+    sendEmailNotification({ timestamp, name, email, message, source });
 
     return ContentService.createTextOutput(JSON.stringify({
       result: "success",
@@ -46,4 +47,40 @@ function getSubmissionData_(e) {
   }
 
   return e.parameter || {};
+}
+
+function sendEmailNotification({ timestamp, name, email, message, source }) {
+  const recipient = "nagekarsimran@outlook.com";
+  const subject = `New portfolio contact from ${name || "someone"}`;
+  const plainTextBody = [
+    `Name: ${name || "N/A"}`,
+    `Email: ${email || "N/A"}`,
+    `Message: ${message || "N/A"}`,
+    `Source: ${source || "N/A"}`,
+    `Timestamp: ${timestamp.toISOString()}`,
+  ].join("\n");
+
+  const htmlBody = `
+    <p><strong>Name:</strong> ${escapeHtml_(name || "N/A")}</p>
+    <p><strong>Email:</strong> ${escapeHtml_(email || "N/A")}</p>
+    <p><strong>Message:</strong><br>${escapeHtml_(message || "N/A").replace(/\n/g, "<br>")}</p>
+    <p><strong>Source:</strong> ${escapeHtml_(source || "N/A")}</p>
+    <p><strong>Timestamp:</strong> ${escapeHtml_(timestamp.toISOString())}</p>
+  `;
+
+  MailApp.sendEmail({
+    to: recipient,
+    subject,
+    body: plainTextBody,
+    htmlBody,
+  });
+}
+
+function escapeHtml_(value) {
+  return String(value)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/\"/g, "&quot;")
+    .replace(/'/g, "&#39;");
 }
