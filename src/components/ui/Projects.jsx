@@ -9,8 +9,7 @@ export default function Projects({ name, img, alt, type, link, year, tools }) {
       >
         <img
           className="w-screen duration-700 ease-in-out group-hover:scale-105"
-          src={img}
-          alt={alt}
+          {...(img ? { src: img, alt } : { alt: "" })}
           width="800"
           height="600"
         />

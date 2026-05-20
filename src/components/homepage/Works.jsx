@@ -1,10 +1,11 @@
-import folio25Image from "/vite.svg";
-import bytemeTempImage from "/vite.svg";
-import riftImage from "/vite.svg";
-import gdgTempImage from "/vite.svg";
-import quickAirTempImage from "/vite.svg";
-import ballbackTempImage from "/vite.svg";
-import oxoTempImage from "/vite.svg";
+// project images intentionally left blank (no placeholder)
+const folio25Image = null;
+const bytemeTempImage = null;
+const riftImage = null;
+const gdgTempImage = null;
+const quickAirTempImage = null;
+const ballbackTempImage = null;
+const oxoTempImage = null;
 
 import Projects from "../ui/Projects";
 import Heading from "../ui/Heading";

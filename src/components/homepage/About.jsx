@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import profileImg from "/vite.svg";
+import profileImg from "../../assets/images/Me.png";
 import { ScrollTrigger } from "gsap/all";
 import { gsap } from "gsap";
 import Heading from "../ui/Heading";

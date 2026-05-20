@@ -1,6 +1,11 @@
 export default function Footer() {
   function toTop() {
-    window.scrollTo(0, 0)
+    if (typeof window !== "undefined" && window.__lenis?.scrollTo) {
+      window.__lenis.scrollTo(0);
+      return;
+    }
+
+    window.scrollTo({ top: 0, behavior: "smooth" })
   }
 
   return (
@@ -47,7 +52,7 @@ export default function Footer() {
                 gradientUnits="userSpaceOnUse"
               >
                 {" "}
-                <stop stopColor="#D1D1C7" />{" "}
+                <stop stopColor="#c7c8d1" />{" "}
               </linearGradient>{" "}
             </defs>{" "}
           </svg>

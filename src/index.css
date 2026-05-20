@@ -94,29 +94,34 @@
   }
 }
 
-/* TEMPORARY: visually hide actual image content and show a high-contrast
-   dashed outline around images and elements using background-image so
-   you can easily see image slots without altering layout. */
-img,
-picture img,
-figure img,
-svg img,
-[style*="background-image"],
-[style*="background-image"] * {
-  /* hide actual image pixels */
-  filter: opacity(0) !important;
-  background-image: none !important;
-  background: transparent !important;
-  /* high-contrast dashed outline that's hard to miss */
-  outline: 3px dashed rgba(255, 0, 128, 0.95) !important;
-  outline-offset: -3px !important;
-  box-sizing: border-box !important;
+/* Hint GPU for elements that are animated via translate/opacity to reduce jank */
+.translate-y-10,
+.opacity-0 {
+  will-change: transform, opacity;
 }
 
-/* preserve rounded corners if present */
-img[class*="rounded"],
-img.rounded,
-img.rounded-md,
-img.rounded-full {
-  border-radius: inherit !important;
+.logo-hero {
+  display: inline-flex;
+  align-items: center;
 }
+
+.logo-initial {
+  display: inline-block;
+}
+
+.logo-rest {
+  display: inline-block;
+  max-width: 0;
+  opacity: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  transform: translateX(-0.25em);
+  transition: max-width 0.45s ease, opacity 0.3s ease, transform 0.45s ease;
+}
+
+.logo-hero:hover .logo-rest {
+  max-width: 20ch;
+  opacity: 1;
+  transform: translateX(0);
+}
+

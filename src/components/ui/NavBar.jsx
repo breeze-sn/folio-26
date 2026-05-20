@@ -12,13 +12,38 @@ export default function NavBar({ sectionRefs }) {
   gsap.registerPlugin(ScrollTrigger);
 
   useEffect(() => {
-    const lenis = new Lenis();
-    function raf(time) {
-      lenis.raf(time);
-      requestAnimationFrame(raf);
+    if (typeof window === "undefined") {
+      return;
     }
-    requestAnimationFrame(raf);
-  });
+
+    if (window.__lenis) {
+      if (!window.__lenisRaf) {
+        const raf = (time) => {
+          window.__lenis.raf(time);
+          window.__lenisRaf = requestAnimationFrame(raf);
+        };
+        window.__lenisRaf = requestAnimationFrame(raf);
+      }
+      return;
+    }
+
+    const lenis = new Lenis();
+    window.__lenis = lenis;
+
+    const raf = (time) => {
+      lenis.raf(time);
+      window.__lenisRaf = requestAnimationFrame(raf);
+    };
+    window.__lenisRaf = requestAnimationFrame(raf);
+
+    return () => {
+      if (window.__lenisRaf) {
+        cancelAnimationFrame(window.__lenisRaf);
+      }
+      delete window.__lenisRaf;
+      delete window.__lenis;
+    };
+  }, []);
 
   useEffect(() => {
     tl.to(navBar.current, {
@@ -58,21 +83,22 @@ export default function NavBar({ sectionRefs }) {
       <a href="#hero" aria-label="Logo" className="z-50">
         <span
           ref={logo}
-          className="font-grotesk text-lg font-black uppercase tracking-[0.2em] text-accent-400 sm:text-xl"
+          className="logo-hero font-grotesk text-lg font-black uppercase tracking-[0.2em] text-accent-400 sm:text-xl"
         >
-          Simran Nagekar
+          <span className="logo-initial">S</span>
+          <span className="logo-rest">imran Nagekar</span>
         </span>
       </a>
-      <nav className=" space-x-7 font-grotesk text-body-3 sm:block">
-        <a href="#about" className="group relative hidden md:inline-block">
+      <nav className="flex items-center font-grotesk text-body-3">
+        <a href="#about" className="group relative inline-flex items-center px-3 py-1">
           <span>about</span>
           <span className="absolute bottom-0 left-0 h-[0.125em] w-0 rounded-full bg-secondary-600 duration-300 ease-in-out group-hover:w-full"></span>
         </a>
-        <a href="#services" className="group relative hidden md:inline-block">
+        <a href="#services" className="group relative inline-flex items-center px-3 py-1">
           <span>services</span>
           <span className="absolute bottom-0 left-0 h-[0.125em] w-0 rounded-full bg-secondary-600 duration-300 ease-in-out group-hover:w-full"></span>
         </a>
-        <a href="#works" className="group relative hidden md:inline-block">
+        <a href="#works" className="group relative inline-flex items-center px-3 py-1">
           <span>projects</span>
           <span className="absolute bottom-0 left-0 h-[0.125em] w-0 rounded-full bg-secondary-600 duration-300 ease-in-out group-hover:w-full"></span>
         </a>

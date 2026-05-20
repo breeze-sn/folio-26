@@ -1,10 +1,11 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 
 export default function Cursor() {
-  const [cursor, setCursor] = useState({ x: 0, y: 0 });
   const curs = useRef(null);
   const svg = useRef(null);
+  const posRef = useRef({ x: 0, y: 0 });
+  const rafRef = useRef(null);
 
   useEffect(() => {
     // TODO Learn useContext and useRef here
@@ -33,22 +34,32 @@ export default function Cursor() {
     });
 
     function moveCursor(e) {
-      setCursor({ x: e.clientX, y: e.clientY });
+      posRef.current.x = e.clientX;
+      posRef.current.y = e.clientY;
     }
     document.addEventListener("mousemove", moveCursor);
 
+    const loop = () => {
+      const { x, y } = posRef.current;
+      if (curs.current) {
+        curs.current.style.left = x + "px";
+        curs.current.style.top = y + "px";
+      }
+      rafRef.current = requestAnimationFrame(loop);
+    };
+    rafRef.current = requestAnimationFrame(loop);
+
     return () => {
       document.removeEventListener("mousemove", moveCursor);
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
     };
   }, []);
-
-  const { x, y } = cursor;
 
   return (
     <div
       ref={curs}
       className="cursor pointer-events-none fixed left-1/2 top-1/2 z-[999] hidden h-3 w-3 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-secondary-600 sm:flex"
-      style={{ left: `${x}px`, top: `${y}px` }}
+      style={{ left: "50%", top: "50%" }}
     >
       <svg
         ref={svg}
