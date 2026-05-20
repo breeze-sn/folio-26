@@ -1,40 +1,49 @@
-const DEFAULT_SHEET_NAME = "Contact Responses";
-
 function doGet() {
   return HtmlService.createHtmlOutput("Contact form endpoint is running.");
 }
 
 function doPost(e) {
-  const sheet = getOrCreateSheet_();
-  const params = (e && e.parameter) || {};
+  try {
+    const params = getSubmissionData_(e);
+    const spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
+    const sheet = spreadsheet.getSheetByName("Folio'26") || spreadsheet.getSheets()[1];
 
-  const timestamp = new Date();
-  const name = (params.name || "").trim();
-  const email = (params.email || "").trim();
-  const message = (params.message || "").trim();
-  const source = (params.source || "portfolio-contact").trim();
+    if (!sheet) {
+      throw new Error("Sheet 'Folio'26' was not found.");
+    }
 
-  sheet.appendRow([timestamp, name, email, message, source]);
+    const timestamp = new Date();
+    const name = (params.name || "").trim();
+    const email = (params.email || "").trim();
+    const message = (params.message || "").trim();
+    const source = (params.source || "portfolio-contact").trim();
 
-  return HtmlService.createHtmlOutput("Message saved successfully.");
+    sheet.appendRow([timestamp, name, email, message, source]);
+
+    return ContentService.createTextOutput(JSON.stringify({
+      result: "success",
+      message: "Data added successfully"
+    })).setMimeType(ContentService.MimeType.JSON);
+  } catch (error) {
+    return ContentService.createTextOutput(JSON.stringify({
+      result: "error",
+      message: error.toString()
+    })).setMimeType(ContentService.MimeType.JSON);
+  }
 }
 
-function getOrCreateSheet_() {
-  const props = PropertiesService.getScriptProperties();
-  const spreadsheetId = props.getProperty("SPREADSHEET_ID");
-  const sheetName = props.getProperty("SHEET_NAME") || DEFAULT_SHEET_NAME;
-
-  if (!spreadsheetId) {
-    throw new Error("Missing script property SPREADSHEET_ID.");
+function getSubmissionData_(e) {
+  if (!e) {
+    throw new Error("doPost requires an event object. Test it by sending a request to the web app URL, not by running the function directly.");
   }
 
-  const spreadsheet = SpreadsheetApp.openById(spreadsheetId);
-  let sheet = spreadsheet.getSheetByName(sheetName);
-
-  if (!sheet) {
-    sheet = spreadsheet.insertSheet(sheetName);
-    sheet.appendRow(["Timestamp", "Name", "Email", "Message", "Source"]);
+  if (e.postData && e.postData.contents) {
+    try {
+      return JSON.parse(e.postData.contents);
+    } catch (error) {
+      // Fall back to form fields if the request body is not JSON.
+    }
   }
 
-  return sheet;
+  return e.parameter || {};
 }

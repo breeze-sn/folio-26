@@ -7,9 +7,7 @@ Use this Apps Script to store contact form submissions from the portfolio site i
 1. Create a Google Sheet.
 2. Open **Extensions > Apps Script**.
 3. Paste the contents of `Code.gs` into the Apps Script editor.
-4. In **Project Settings > Script Properties**, set:
-   - `SPREADSHEET_ID` = your Google Sheet ID
-   - `SHEET_NAME` = optional, defaults to `Contact Responses`
+4. Make sure the sheet tab you want to receive submissions is named `Folio'26`.
 5. Deploy the script as a **Web app**.
    - Execute as: **Me**
    - Who has access: **Anyone**

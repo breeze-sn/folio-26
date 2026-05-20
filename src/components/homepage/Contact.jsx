@@ -7,7 +7,8 @@ import Heading from "../ui/Heading";
 export default function Contact() {
   const [time, setTime] = useState(new Date().toLocaleTimeString());
   const [submissionStatus, setSubmissionStatus] = useState("idle");
-  const appsScriptUrl = import.meta.env.VITE_APPS_SCRIPT_URL ?? "";
+  const defaultAppsScriptUrl = "https://script.google.com/macros/s/AKfycbwMG71JQDope-8utwNojUqOc2j2nXJTo4K8mHTlGWdvRb8Z4PonqjHkZhAwahSjOh2tEg/exec";
+  const appsScriptUrl = import.meta.env.VITE_APPS_SCRIPT_URL?.trim() || defaultAppsScriptUrl;
 
   const heading = useRef(null)
   const body = useRef(null)
