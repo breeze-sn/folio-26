@@ -37,11 +37,11 @@ export default function About() {
     <section ref={aboutSection} aria-label="about me">
       <Heading title="about me" />
       <div className="mt-10 flex flex-col items-start gap-8 md:flex-row lg:gap-10 ">
-        <div className="top-28 overflow-hidden rounded-md md:sticky md:w-1/2">
+        <div className="hidden overflow-hidden rounded-md sm:sticky sm:block sm:w-1/2 sm:top-28">
           <img
             ref={profile}
             loading="lazy"
-            className="aspect-square h-auto w-full rounded-md object-cover object-center md:aspect-auto"
+            className="aspect-square h-auto w-full rounded-md object-cover object-center sm:aspect-auto"
             src={profileImg}
             width="600"
             height="800"
