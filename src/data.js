@@ -55,6 +55,15 @@ const projects = [
     year: '2025',
     tools: 'Figma Make',
   },
+  {
+    name: "Folio'25 | Simran Nagekar",
+    link: 'https://www.simrann.dev',
+    img: null,
+    alt: 'Folio 25 portfolio cover',
+    type: 'Portfolio • Product Design • Development',
+    year: '2025',
+    tools: 'React • GSAP • TailwindCSS • Figma',
+  },
 ];
 
 export default projects;

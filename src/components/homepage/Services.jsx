@@ -8,6 +8,7 @@ export default function Services() {
     "Visual Design",
     "Product Design",
     "Web Design",
+    "UI Development",
     "UX Research",
   ];
 

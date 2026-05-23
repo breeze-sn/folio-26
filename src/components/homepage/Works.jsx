@@ -20,21 +20,8 @@ export default function Works({ forwardedRef }) {
       <Heading title="Projects" />
 
       <div className="mt-10 grid grid-cols-1 gap-16 gap-y-10 md:grid-cols-12">
-        
-        {/* Project #1 */}
-        <div className="col-span-1 md:col-span-12">
-          <Projects
-            link="https://www.simrann.dev"
-            img={folio25Image}
-            alt="Folio 25 portfolio cover"
-            name="Folio'25 | Simran Nagekar"
-            type="Portfolio • Product Design • Development"
-            year="2025"
-            tools="React • GSAP • TailwindCSS • Figma"
-          />
-        </div>
 
-        {/* Project #2 */}
+        {/* Project #1 */}
         <div className="col-span-1 pt-0 md:col-span-7 md:pt-16">
           <Projects
             link="https://breeze-sn.github.io/ByteMe/"
@@ -44,6 +31,19 @@ export default function Works({ forwardedRef }) {
             type="Web Design • Frontend Development"
             year="2026"
             tools="HTML • CSS • JavaScript • Figma"
+          />
+        </div>
+
+        {/* Project #2 */}
+        <div className="col-span-1 md:col-span-6">
+          <Projects
+            link="https://github.com/breeze-sn/Ballback"
+            img={ballbackTempImage}
+            alt="Ballback game project"
+            name="Ballback"
+            type="Game Design • Development"
+            year="2025"
+            tools="Unity • C# • Figma • Adobe Illustrator"
           />
         </div>
 
@@ -87,19 +87,6 @@ export default function Works({ forwardedRef }) {
         </div>
 
         {/* Project #6 */}
-        <div className="col-span-1 md:col-span-6">
-          <Projects
-            link="https://github.com/breeze-sn/Ballback"
-            img={ballbackTempImage}
-            alt="Ballback game project"
-            name="Ballback"
-            type="Game Design • Development"
-            year="2025"
-            tools="Unity • C# • Figma • Adobe Illustrator"
-          />
-        </div>
-
-        {/* Project #7 */}
         <div className="col-span-1 md:col-span-6 md:pt-32">
           <Projects
             link="https://oxo.figma.site"
@@ -109,6 +96,19 @@ export default function Works({ forwardedRef }) {
             type="Interactive Design • UI/UX"
             year="2025"
             tools="Figma Make"
+          />
+        </div>
+
+        {/* Project #7 */}
+        <div className="col-span-1 md:col-span-12">
+          <Projects
+            link="https://www.simrann.dev"
+            img={folio25Image}
+            alt="Folio 25 portfolio cover"
+            name="Folio'25 | Simran Nagekar"
+            type="Portfolio • Product Design • Development"
+            year="2025"
+            tools="React • GSAP • TailwindCSS • Figma"
           />
         </div>
 
