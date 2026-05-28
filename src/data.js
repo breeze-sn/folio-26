@@ -1,10 +1,17 @@
 // projects data (canonical source for project lists)
-// Images intentionally left null so projects render blank without placeholders
+import ByteMeImg from "./assets/images/ByteMe.svg";
+import RiftImg from "./assets/images/Rift.svg";
+import GDGImg from "./assets/images/GDG.svg";
+import QuickAirImg from "./assets/images/Quick Air.svg";
+import BallBackImg from "./assets/images/BallBack.svg";
+import OXOImg from "./assets/images/OXO.svg";
+import Folio25Img from "./assets/images/folio'25.svg";
+
 const projects = [
   {
     name: 'ByteMe',
     link: 'https://breeze-sn.github.io/ByteMe/',
-    img: null,
+    img: ByteMeImg,
     alt: 'ByteMe project cover',
     type: 'Web Design • Frontend Development',
     year: '2026',
@@ -13,7 +20,7 @@ const projects = [
   {
     name: 'RIFT Design',
     link: 'https://www.revarift.tech',
-    img: null,
+    img: RiftImg,
     alt: 'RIFT design showcase',
     type: 'Branding • UI/UX • Product Design',
     year: '2026',
@@ -22,7 +29,7 @@ const projects = [
   {
     name: 'GDG Community Design & Identity',
     link: 'https://www.behance.net/gallery/238530857/GDGoC-REVA-University-Community-Design-Identity',
-    img: null,
+    img: GDGImg,
     alt: 'GDG community design project',
     type: 'Brand & Visual Identity • Community Design',
     year: '2025',
@@ -31,7 +38,7 @@ const projects = [
   {
     name: 'Quick Air',
     link: 'https://www.behance.net/gallery/230187655/Quick-Air',
-    img: null,
+    img: QuickAirImg,
     alt: 'Quick Air project showcase',
     type: 'UX Research • Product Design',
     year: '2025',
@@ -40,7 +47,7 @@ const projects = [
   {
     name: 'Ballback',
     link: 'https://github.com/breeze-sn/Ballback',
-    img: null,
+    img: BallBackImg,
     alt: 'Ballback game project',
     type: 'Game Design • Development',
     year: '2025',
@@ -49,7 +56,7 @@ const projects = [
   {
     name: 'OXO',
     link: 'https://oxo.figma.site',
-    img: null,
+    img: OXOImg,
     alt: 'OXO project showcase',
     type: 'Interactive Design • UI/UX',
     year: '2025',
@@ -58,7 +65,7 @@ const projects = [
   {
     name: "Folio'25 | Simran Nagekar",
     link: 'https://www.simrann.dev',
-    img: null,
+    img: Folio25Img,
     alt: 'Folio 25 portfolio cover',
     type: 'Portfolio • Product Design • Development',
     year: '2025',

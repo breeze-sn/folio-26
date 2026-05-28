@@ -6,7 +6,6 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 export default function NavBar({ sectionRefs }) {
   const navBar = useRef(null);
-  const logo = useRef(null);
   const cta = useRef(null);
   const tl = gsap.timeline();
   gsap.registerPlugin(ScrollTrigger);
@@ -79,15 +78,9 @@ export default function NavBar({ sectionRefs }) {
       ref={navBar}
       className="fixed top-0 z-50 flex w-full -translate-y-full items-center justify-between bg-secondary-100 px-5 py-3"
     >
-      {/* logo */}
-      <a href="#hero" aria-label="Logo" className="z-50">
-        <span
-          ref={logo}
-          className="logo-hero font-grotesk text-lg font-black uppercase tracking-[0.2em] text-accent-400 sm:text-xl"
-        >
-          <span className="logo-initial">S</span>
-          <span className="logo-rest">imran Nagekar</span>
-        </span>
+      <a href="#hero" aria-label="Logo" className="group relative inline-flex items-center px-3 py-1 font-grotesk text-body-3">
+        <span>Simran Nagekar</span>
+        <span className="absolute bottom-0 left-0 h-[0.125em] w-0 rounded-full bg-secondary-600 duration-300 ease-in-out group-hover:w-full"></span>
       </a>
       <nav className="flex items-center font-grotesk text-body-3">
         <a href="#about" className="group relative inline-flex items-center px-3 py-1">
