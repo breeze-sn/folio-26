@@ -11,6 +11,7 @@ import Services from "./components/homepage/Services";
 import Works from "./components/homepage/Works";
 import Contact from "./components/homepage/Contact";
 import Footer from "./components/ui/Footer";
+import Seo from "./components/ui/Seo";
 
 const App = () => {
  
@@ -48,6 +49,12 @@ const App = () => {
 
   return (
     <div className="bg-secondary-100">
+      <Seo
+        title={"Home"}
+        description={"Portfolio of Simran Nagekar — Game & Product Designer based in Bangalore, India."}
+        image={"https://simransn.tech/og-image.svg"}
+        url={"https://simransn.tech/"}
+      />
       <NavBar sectionRefs={sectionRefs.current} />{" "}
       {/* passing sectionRefs props to give access to Navbar, Navbar can then access the props which have access to the array of sectionRef and loop over it */}
       <Hero />
