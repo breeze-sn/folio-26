@@ -76,13 +76,13 @@ export default function NavBar({ sectionRefs }) {
   return (
     <header
       ref={navBar}
-      className="fixed top-0 z-50 flex w-full -translate-y-full items-center justify-between bg-secondary-100 px-5 py-3"
+      className="fixed top-0 z-50 flex w-full -translate-y-full items-center justify-between bg-secondary-100 px-3 py-3 sm:px-5"
     >
-      <a href="#hero" aria-label="Logo" className="group relative inline-flex items-center px-3 py-1 font-grotesk text-body-3">
+      <a href="#hero" aria-label="Logo" className="group relative inline-flex shrink-0 items-center px-3 py-1 font-grotesk text-body-3">
         <span>Simran Nagekar</span>
         <span className="absolute bottom-0 left-0 h-[0.125em] w-0 rounded-full bg-secondary-600 duration-300 ease-in-out group-hover:w-full"></span>
       </a>
-      <nav className="flex items-center font-grotesk text-body-3">
+      <nav className="flex min-w-0 flex-1 items-center justify-end gap-1 overflow-x-auto whitespace-nowrap font-grotesk text-body-3 sm:gap-0 sm:overflow-visible">
         <a href="#about" className="group relative inline-flex items-center px-3 py-1">
           <span>about</span>
           <span className="absolute bottom-0 left-0 h-[0.125em] w-0 rounded-full bg-secondary-600 duration-300 ease-in-out group-hover:w-full"></span>

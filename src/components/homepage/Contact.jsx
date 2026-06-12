@@ -8,6 +8,7 @@ export default function Contact() {
   const [time, setTime] = useState(new Date().toLocaleTimeString());
   const [submissionStatus, setSubmissionStatus] = useState("idle");
   const contactApiUrl = "/contact";
+  const typeformUrl = "https://form.typeform.com/to/Q0LLEnXM";
 
   const heading = useRef(null)
   const body = useRef(null)
@@ -140,18 +141,31 @@ export default function Contact() {
                 </label>
               </div>
             </div>
-            <button
-              type="submit"
-              disabled={submissionStatus === "sending"}
-              className="button group mt-10 border duration-200 hover:border-accent-400 hover:bg-transparent disabled:cursor-not-allowed disabled:opacity-70"
-            >
-              <span className="relative">
-                <span className="absolute bottom-2 h-1 w-0 bg-secondary-700 opacity-90 duration-300 ease-out group-hover:w-full"></span>
-                <span className="group-hover:text-accent-400">
-                  {submissionStatus === "sending" ? "Sending..." : "Send Message"}
+            <div className="mt-10 flex flex-col gap-4 sm:flex-row">
+              <button
+                type="submit"
+                disabled={submissionStatus === "sending"}
+                className="button group border duration-200 hover:border-accent-400 hover:bg-transparent disabled:cursor-not-allowed disabled:opacity-70"
+              >
+                <span className="relative">
+                  <span className="absolute bottom-2 h-1 w-0 bg-secondary-700 opacity-90 duration-300 ease-out group-hover:w-full"></span>
+                  <span className="group-hover:text-accent-400">
+                    {submissionStatus === "sending" ? "Sending..." : "Send Message"}
+                  </span>
                 </span>
-              </span>
-            </button>
+              </button>
+              <a
+                href={typeformUrl}
+                target="_blank"
+                rel="noreferrer"
+                className="button group border duration-200 hover:border-accent-400 hover:bg-transparent"
+              >
+                <span className="relative">
+                  <span className="absolute bottom-2 h-1 w-0 bg-secondary-700 opacity-90 duration-300 ease-out group-hover:w-full"></span>
+                  <span className="group-hover:text-accent-400">Open Typeform</span>
+                </span>
+              </a>
+            </div>
             <p className="mt-4 min-h-6 text-body-4 text-secondary-600">
               {submissionStatus === "success" && "Message sent. I’ll get back to you soon."}
             </p>
