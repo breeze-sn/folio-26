@@ -7,8 +7,7 @@ import Heading from "../ui/Heading";
 export default function Contact() {
   const [time, setTime] = useState(new Date().toLocaleTimeString());
   const [submissionStatus, setSubmissionStatus] = useState("idle");
-  const defaultAppsScriptUrl = "https://script.google.com/macros/s/AKfycbwMG71JQDope-8utwNojUqOc2j2nXJTo4K8mHTlGWdvRb8Z4PonqjHkZhAwahSjOh2tEg/exec";
-  const appsScriptUrl = import.meta.env.VITE_APPS_SCRIPT_URL?.trim() || defaultAppsScriptUrl;
+  const contactApiUrl = "/contact";
 
   const heading = useRef(null)
   const body = useRef(null)
@@ -43,22 +42,21 @@ export default function Contact() {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    if (!appsScriptUrl) {
-      setSubmissionStatus("error");
-      return;
-    }
-
     const formData = new FormData(event.currentTarget);
+    const payload = Object.fromEntries(formData.entries());
 
     setSubmissionStatus("sending");
 
     try {
-      const response = await fetch(appsScriptUrl, {
+      const response = await fetch(contactApiUrl, {
         method: "POST",
-        body: new URLSearchParams(formData),
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
       });
 
-      if (!response.ok && response.type !== "opaqueredirect") {
+      if (!response.ok) {
         throw new Error(`Request failed with status ${response.status}`);
       }
 
@@ -87,10 +85,7 @@ export default function Contact() {
           <form
             ref={formRef}
             name="contact"
-            action={appsScriptUrl}
-            autoComplete="off"
             className="mt-10 font-grotesk"
-            method="POST" 
             onSubmit={handleSubmit}
           >
             <input type="hidden" name="form-name" value="contact"/>
@@ -159,7 +154,6 @@ export default function Contact() {
             </button>
             <p className="mt-4 min-h-6 text-body-4 text-secondary-600">
               {submissionStatus === "success" && "Message sent. I’ll get back to you soon."}
-              {submissionStatus === "error" && !appsScriptUrl && "Add VITE_APPS_SCRIPT_URL to connect this form to Apps Script."}
             </p>
           </form>
           <iframe
