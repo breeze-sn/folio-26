@@ -16,7 +16,7 @@ export default function Contact() {
   const formRef = useRef(null)
 
   useEffect(() => {
-    ScrollTrigger.create({
+    const trigger = ScrollTrigger.create({
       trigger: contactSection.current,
       start:"180px bottom",
 
@@ -30,7 +30,8 @@ export default function Contact() {
     });
     ScrollTrigger.refresh();
 
-  }, [contactSection])
+    return () => trigger.kill();
+  }, [])
 
   useEffect(() => {
     const intervalId = setInterval(() => {
@@ -38,7 +39,7 @@ export default function Contact() {
     }, 1000);
 
     return () => clearInterval(intervalId);
-  });
+  }, []);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -111,7 +112,7 @@ export default function Contact() {
               <div className="relative z-0">
                 <input
                   required
-                  type="text"
+                  type="email"
                   name="email"
                   id="email"
                   className="peer block w-full appearance-none border-0 border-b border-accent-100 bg-transparent px-0 py-2.5 focus:outline-none focus:ring-0"
@@ -168,6 +169,7 @@ export default function Contact() {
             </div>
             <p className="mt-4 min-h-6 text-body-4 text-secondary-600">
               {submissionStatus === "success" && "Message sent. I’ll get back to you soon."}
+              {submissionStatus === "error" && "Something went wrong. Please try again or use Typeform."}
             </p>
           </form>
           <iframe

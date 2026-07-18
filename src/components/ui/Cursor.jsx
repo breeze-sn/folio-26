@@ -19,18 +19,18 @@ export default function Cursor() {
       0
     );
 
-    images.forEach((img) => {
-      img.addEventListener("mouseenter", function () {
-        tl.play();
+    const handleMouseEnter = () => tl.play();
+    const handleMouseLeave = () => {
+      tl.reverse();
+      tl.eventCallback("onReverseComplete", () => {
+        gsap.set(svg.current, { opacity: 0 });
+        gsap.set(curs.current, { height: "12px", width:"12px" });
       });
+    };
 
-      img.addEventListener("mouseleave", function () {
-        tl.reverse();
-        tl.eventCallback("onReverseComplete", function () {
-          gsap.set(svg.current, { opacity: 0 }); // Hide the SVG element
-          gsap.set(curs.current, { height: "12px", width:"12px" }); // Hide the SVG element
-        });
-      });
+    images.forEach((img) => {
+      img.addEventListener("mouseenter", handleMouseEnter);
+      img.addEventListener("mouseleave", handleMouseLeave);
     });
 
     function moveCursor(e) {
@@ -51,7 +51,12 @@ export default function Cursor() {
 
     return () => {
       document.removeEventListener("mousemove", moveCursor);
+      images.forEach((img) => {
+        img.removeEventListener("mouseenter", handleMouseEnter);
+        img.removeEventListener("mouseleave", handleMouseLeave);
+      });
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
+      tl.kill();
     };
   }, []);
 

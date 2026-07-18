@@ -7,7 +7,6 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 export default function NavBar({ sectionRefs }) {
   const navBar = useRef(null);
   const cta = useRef(null);
-  const tl = gsap.timeline();
   gsap.registerPlugin(ScrollTrigger);
 
   useEffect(() => {
@@ -39,23 +38,26 @@ export default function NavBar({ sectionRefs }) {
       if (window.__lenisRaf) {
         cancelAnimationFrame(window.__lenisRaf);
       }
+      lenis.destroy();
       delete window.__lenisRaf;
       delete window.__lenis;
     };
   }, []);
 
   useEffect(() => {
-    tl.to(navBar.current, {
+    const animation = gsap.to(navBar.current, {
       y: 0,
       duration: 3,
       delay: 0.5,
       ease: "power4.inOut",
     });
-  });
+
+    return () => animation.kill();
+  }, []);
 
 
   useEffect(() => {
-    sectionRefs.forEach((section) => {
+    const triggers = sectionRefs.filter(Boolean).map((section) =>
       ScrollTrigger.create({
         trigger: section,
         start: "top 375px",
@@ -68,10 +70,11 @@ export default function NavBar({ sectionRefs }) {
           .to(".bg-secondary-100", { backgroundColor: "#0E0E0C" }, 0),
 
         toggleActions: "restart reverse restart reverse",
-      });
-    });
+      })
+    );
 
-  });
+    return () => triggers.forEach((trigger) => trigger.kill());
+  }, [sectionRefs]);
 
   return (
     <header

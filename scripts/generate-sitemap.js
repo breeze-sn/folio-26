@@ -4,26 +4,23 @@ import path from "path";
 const outPath = path.resolve("public/sitemap.xml");
 const baseUrl = "https://simransn.tech";
 
-async function loadProjects() {
+function loadProjects() {
   try {
-    const dataModule = await import("../src/data.js");
-    return dataModule.default || [];
-  } catch (err) {
-    console.warn("Could not import data module, falling back to text parse.", err.message);
-    // Fallback: read the file and extract 'link' values via regex
-    try {
-      const file = fs.readFileSync(path.resolve("src/data.js"), "utf8");
-      const linkRegex = /link:\s*['"]([^'"]+)['"]/g;
-      const matches = [];
-      let m;
-      while ((m = linkRegex.exec(file)) !== null) {
-        matches.push(m[1]);
-      }
-      return matches.map((l) => ({ link: l }));
-    } catch (e) {
-      console.error("Fallback parse failed:", e);
-      return [];
+    // This file imports SVGs that Node cannot load without Vite, so read links
+    // directly from the canonical project data instead of attempting an import.
+    const file = fs.readFileSync(path.resolve("src/data.js"), "utf8");
+    const linkRegex = /link:\s*['"]([^'"]+)['"]/g;
+    const matches = [];
+    let match;
+
+    while ((match = linkRegex.exec(file)) !== null) {
+      matches.push(match[1]);
     }
+
+    return matches.map((link) => ({ link }));
+  } catch (error) {
+    console.error("Unable to read project links:", error.message);
+    return [];
   }
 }
 
@@ -32,7 +29,7 @@ function formatDate(d = new Date()) {
 }
 
 async function build() {
-  const projects = await loadProjects();
+  const projects = loadProjects();
 
   const urls = [
     { loc: `${baseUrl}/`, lastmod: formatDate() },
