@@ -4,11 +4,8 @@ export default function handler(request, response) {
   const config = spotifyConfig();
   if (!isConfigured(config)) {
     return response.status(503).send(
-      "Spotify is not configured. Add SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET, SPOTIFY_REDIRECT_URI, and SPOTIFY_CONNECT_TOKEN in Vercel, then redeploy."
+      "Spotify is not configured. Add SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET, and SPOTIFY_REDIRECT_URI in Vercel, then redeploy."
     );
-  }
-  if (request.query.token !== config.connectToken) {
-    return response.status(404).end();
   }
 
   const authorizeUrl = new URL("https://accounts.spotify.com/authorize");
@@ -17,7 +14,7 @@ export default function handler(request, response) {
     response_type: "code",
     redirect_uri: config.redirectUri,
     scope: "user-read-currently-playing user-read-playback-state",
-    state: createState(config.connectToken),
+    state: createState(config.clientSecret),
     show_dialog: "true",
   }).toString();
   return response.redirect(authorizeUrl.toString());

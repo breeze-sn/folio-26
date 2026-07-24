@@ -5,7 +5,6 @@ export function spotifyConfig() {
     clientId: process.env.SPOTIFY_CLIENT_ID,
     clientSecret: process.env.SPOTIFY_CLIENT_SECRET,
     redirectUri: process.env.SPOTIFY_REDIRECT_URI,
-    connectToken: process.env.SPOTIFY_CONNECT_TOKEN,
     refreshToken: process.env.SPOTIFY_REFRESH_TOKEN,
     fallbackUrl: process.env.SPOTIFY_FALLBACK_URL || "",
   };
@@ -16,7 +15,6 @@ export function isConfigured(config, requireRefreshToken = false) {
     config.clientId &&
       config.clientSecret &&
       config.redirectUri &&
-      config.connectToken &&
       (!requireRefreshToken || config.refreshToken)
   );
 }

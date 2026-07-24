@@ -2,8 +2,8 @@ import { escapeHtml, hasValidState, isConfigured, requestSpotifyToken, spotifyCo
 
 export default async function handler(request, response) {
   const config = spotifyConfig();
-  if (!isConfigured(config) || !request.query.code || !hasValidState(request.query.state, config.connectToken)) {
-    return response.status(400).send("Spotify connection could not be verified. Please start again from your private connect URL.");
+  if (!isConfigured(config) || !request.query.code || !hasValidState(request.query.state, config.clientSecret)) {
+    return response.status(400).send("Spotify connection could not be verified. Please start the authorization again.");
   }
 
   try {
