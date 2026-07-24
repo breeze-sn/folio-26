@@ -12,28 +12,24 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const port = process.env.PORT || 3000;
 
-if (!process.env.DATABASE_URL) {
-  throw new Error("DATABASE_URL is required.");
-}
+const missingContactConfig = [
+  "DATABASE_URL",
+  "RESEND_API_KEY",
+  "FROM_EMAIL",
+  "TO_EMAIL",
+].filter((name) => !process.env[name]);
+const contactServiceEnabled = missingContactConfig.length === 0;
+let contactServiceReady = false;
 
-if (!process.env.RESEND_API_KEY) {
-  throw new Error("RESEND_API_KEY is required.");
-}
-
-if (!process.env.FROM_EMAIL) {
-  throw new Error("FROM_EMAIL is required.");
-}
-
-if (!process.env.TO_EMAIL) {
-  throw new Error("TO_EMAIL is required.");
-}
-
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-  ssl: { rejectUnauthorized: false },
-});
-
-const resend = new Resend(process.env.RESEND_API_KEY);
+// Keep the portfolio available even when optional contact-service secrets have
+// not been configured in Render yet. The endpoint returns a clear 503 instead.
+const pool = contactServiceEnabled
+  ? new Pool({
+      connectionString: process.env.DATABASE_URL,
+      ssl: { rejectUnauthorized: false },
+    })
+  : null;
+const resend = contactServiceEnabled ? new Resend(process.env.RESEND_API_KEY) : null;
 
 async function ensureContactSubmissionsTable() {
   try {
@@ -60,10 +56,24 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.get("/health", (_, response) => {
-  response.json({ ok: true });
+  response.json({ ok: true, contactServiceEnabled, contactServiceReady });
 });
 
 app.post("/contact", async (request, response) => {
+  if (!contactServiceEnabled) {
+    return response.status(503).json({
+      ok: false,
+      message: "Contact service is not configured.",
+    });
+  }
+
+  if (!contactServiceReady) {
+    return response.status(503).json({
+      ok: false,
+      message: "Contact service is temporarily unavailable.",
+    });
+  }
+
   try {
     const { name, email, message, source = "portfolio-contact" } = request.body;
 
@@ -121,18 +131,23 @@ function escapeHtml(value) {
 }
 
 async function start() {
-  try {
-    console.log("Starting server...");
-    await ensureContactSubmissionsTable();
-    console.log("Table check complete");
+  console.log("Starting server...");
+  app.listen(port, () => {
+    console.log(`Server running on port ${port}`);
+  });
 
-    app.listen(port, () => {
-      console.log(`Server running on port ${port}`);
-    });
-  } catch (error) {
-    console.error("Error during startup:", error.message);
-    console.error("Full error:", error);
-    process.exit(1);
+  if (contactServiceEnabled) {
+    try {
+      await ensureContactSubmissionsTable();
+      contactServiceReady = true;
+      console.log("Table check complete");
+    } catch (error) {
+      console.error("Contact service failed to initialize:", error.message);
+    }
+  } else {
+    console.warn(
+      `Contact service disabled; missing environment variables: ${missingContactConfig.join(", ")}`
+    );
   }
 }
 
