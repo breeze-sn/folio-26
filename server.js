@@ -31,6 +31,7 @@ const pool = contactServiceEnabled
   : null;
 const resend = contactServiceEnabled ? new Resend(process.env.RESEND_API_KEY) : null;
 
+
 async function ensureContactSubmissionsTable() {
   try {
     console.log("Creating table if not exists...");
@@ -114,6 +115,7 @@ app.post("/contact", async (request, response) => {
     return response.status(500).json({ ok: false, message: "Unable to send message." });
   }
 });
+
 
 app.use(express.static(path.join(__dirname, "dist")));
 
