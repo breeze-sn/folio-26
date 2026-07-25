@@ -224,14 +224,3 @@ export default function Breeze() {
     </div>
   );
 }
-
-// //name: 'LinkedIn', url: 'https://linkedin.com/in/simransn', icon: images.LINKEDIN },
-//         { name: 'Behance', url: 'https://behance.net/simrannagekar', icon: images.BEHANCE },
-//         { name: 'Medium', url: 'https://medium.com/@breezesn', icon: images.MEDIUM },
-//         { name: 'Codepen', url: 'https://codepen.io/Simran-Nagekar', icon: images.CODEPEN },
-//         { name: 'Instagram', url: 'https://instagram.com/simran.nagekar', icon: images.INSTAGRAM },
-//         { name: 'Twitter', url: 'https://twitter.com/s1mran0', icon: images.TWITTER },
-//         { name: 'Reddit', url: 'https://reddit.com/user/BreezieXD', icon: images.REDDIT },
-//         { name: 'Pinterest', url: 'https://in.pinterest.com/simran_nagekar', icon: images.PINTEREST },
-//         { name: 'Spotify', url: 'https://https://open.spotify.com/user/31trbfvupfmba4dkc4o445srjxfa', icon: images.SPOTIFY }
-//     ];

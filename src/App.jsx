@@ -1,6 +1,7 @@
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useEffect, useRef } from "react";
+import { SpeedInsights } from "@vercel/speed-insights/react"
 // import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import NavBar from "./components/ui/NavBar";
@@ -21,27 +22,28 @@ const App = () => {
 
   // Scrub animation of section headings
   useEffect(() => {
-    const context = gsap.context(() => {
-      document.querySelectorAll(".section-heading").forEach((heading) => {
-        heading.querySelectorAll(".heading").forEach((individualHeading) => {
-          ScrollTrigger.create({
-            trigger: heading,
-            start: "top 550px",
-            end: "bottom 550px",
-            animation: gsap.to(individualHeading, {
-              opacity: 1,
-              y: 0,
-              ease: "power4.out",
-              duration: 1,
-            }),
-            toggleActions: "play none none none",
-          });
-        });
-      });
-      ScrollTrigger.refresh();
-    });
+    //TODO Learn useContext and useRef here
+    const sectionHeadings = document.querySelectorAll(".section-heading");
+    sectionHeadings.forEach((heading) => {
+      const headings = heading.querySelectorAll(".heading");
 
-    return () => context.revert();
+      headings.forEach((individualHeading) => {
+        ScrollTrigger.create({
+          trigger: heading,
+          start: "top 550px",
+          end: "bottom 550px",
+          animation: gsap.to(individualHeading, {
+            opacity: 1,
+            y: 0,
+            ease: "power4.out",
+            duration: 1,
+          }),
+          toggleActions: "play none none none",
+
+        });
+        ScrollTrigger.refresh()
+      });
+    });
   }, []);
 
   

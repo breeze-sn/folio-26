@@ -54,7 +54,7 @@ export default function About() {
               ref={heading}
               className="translate-y-10 text-heading-3 2xl:text-7xl font-semibold leading-tight opacity-0"
             >
-              Game & Product Designer
+              Product Engineer & Game Designer
             </h3>
             <p ref={body} className="translate-y-10 text-body-1 2xl:text-4xl opacity-0">
               Hi! I&apos;m Simran Nagekar, a creative technology developer and designer
