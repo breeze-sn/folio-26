@@ -26,6 +26,75 @@ function BentoLink({ href, icon, title, detail, className = "", children }) {
   );
 }
 
+function SpotifyNowPlaying({
+  href,
+  cover,
+  track,
+  artist,
+  isPlaying,
+  className = "",
+}) {
+  return (
+    <a
+      href={href}
+      target="_blank"
+      rel="noreferrer"
+      className={`group relative flex min-h-[12rem] flex-col justify-between overflow-hidden rounded-[1.75rem] border border-accent-100/25 bg-primary-100 p-5 shadow-[0_8px_0_rgba(26,26,34,0.06)] transition duration-300 hover:-translate-y-1 hover:border-secondary-600 hover:shadow-[0_16px_0_rgba(47,62,255,0.14)] ${className}`}
+    >
+      <div className="flex items-start justify-between">
+        <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[#1DB954]/15 text-[#1DB954]">
+          <Icon icon="mdi:spotify" className="text-2xl" />
+        </span>
+
+        <Icon
+          icon="lucide:arrow-up-right"
+          className="text-xl text-accent-100 transition-transform duration-300 group-hover:-translate-y-1 group-hover:translate-x-1"
+        />
+      </div>
+
+      <div className="flex items-center gap-4">
+        <img
+          src={cover}
+          alt={track}
+          className="h-16 w-16 rounded-2xl object-cover"
+        />
+
+        <div className="min-w-0 flex-1">
+          <p className="text-xs uppercase tracking-[0.12em] text-accent-100">
+            {isPlaying ? "Now Playing" : "Last Played"}
+          </p>
+
+          <h2 className="mt-1 truncate text-body-1 font-semibold text-accent-300">
+            {track}
+          </h2>
+
+          <p className="truncate text-body-4 text-accent-100">
+            {artist}
+          </p>
+        </div>
+      </div>
+
+      {isPlaying && (
+        <div className="absolute right-5 bottom-5 flex items-end gap-[3px]">
+          <span className="h-3 w-[3px] animate-pulse rounded-full bg-[#1DB954]" />
+          <span
+            className="h-5 w-[3px] animate-pulse rounded-full bg-[#1DB954]"
+            style={{ animationDelay: "0.2s" }}
+          />
+          <span
+            className="h-4 w-[3px] animate-pulse rounded-full bg-[#1DB954]"
+            style={{ animationDelay: "0.4s" }}
+          />
+          <span
+            className="h-6 w-[3px] animate-pulse rounded-full bg-[#1DB954]"
+            style={{ animationDelay: "0.1s" }}
+          />
+        </div>
+      )}
+    </a>
+  );
+}
+
 export default function Breeze() {
   return (
     <div className="min-h-screen bg-secondary-100 px-5 py-5 text-accent-300 md:px-10 md:py-8 xl:px-20 2xl:px-28">
@@ -128,6 +197,14 @@ export default function Breeze() {
             title="Spotify"
             detail="Playlists & Musics <3"
             className="bg-secondary-100"
+          />
+          <SpotifyNowPlaying
+            href={spotify.songUrl}
+            cover={spotify.albumArt}
+            track={spotify.title}
+            artist={spotify.artist}
+            isPlaying={spotify.isPlaying}
+            className="col-span-2"
           />
 
           <div className="col-span-2 flex flex-col justify-between rounded-[1.75rem] border border-dashed border-accent-100/45 p-5 md:col-span-2">
