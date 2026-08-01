@@ -27,121 +27,68 @@ function BentoLink({ href, icon, title, detail, className = "", children }) {
   );
 }
 
-function formatTime(ms = 0) {
-  const totalSeconds = Math.max(0, Math.floor(ms / 1000));
-  const minutes = Math.floor(totalSeconds / 60);
-  const seconds = String(totalSeconds % 60).padStart(2, "0");
-  return `${minutes}:${seconds}`;
-}
-
-function SpotifyNowPlaying({ track, isPlaying, progressMs, className = "" }) {
+function SpotifyNowPlaying({ track, isPlaying, className = "" }) {
   if (!track?.url) {
     return (
-      <article className={`relative overflow-hidden rounded-[1.75rem] border border-white/10 bg-[#121212] text-white shadow-[0_10px_30px_rgba(0,0,0,0.22)] ${className}`}>
+      <article className={`group relative flex min-h-[12rem] flex-col justify-between overflow-hidden rounded-[1.75rem] border border-white/10 bg-[#121212] p-5 text-white shadow-[0_10px_30px_rgba(0,0,0,0.22)] ${className}`}>
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(29,185,84,0.12),transparent_34%),radial-gradient(circle_at_bottom_left,rgba(255,255,255,0.04),transparent_30%)]" />
-        <div className="relative z-10 flex h-full flex-col gap-4 p-5 md:p-6">
-          <div className="flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 font-grotesk text-[11px] uppercase tracking-[0.18em] text-white/55">
-            <Icon icon="mdi:spotify" className="text-sm text-[#1DB954]" />
-            <span>Spotify</span>
-          </div>
-
-          <div className="flex flex-1 items-center">
-            <div className="min-w-0 flex-1 space-y-2">
-              <p className="font-grotesk text-[11px] uppercase tracking-[0.18em] text-white/45">
-                Last played
-              </p>
-              <h2 className="font-general text-[1.1rem] font-semibold leading-tight text-white/85 sm:text-[1.35rem]">
-                Spotify will show here once playback is available
-              </h2>
-              <p className="font-grotesk text-sm text-white/55 sm:text-[0.95rem]">
-                When the API returns a track, this card switches to the live client-side player.
-              </p>
-
-              <div className="mt-4 space-y-2">
-                <div className="h-2 overflow-hidden rounded-full bg-white/10">
-                  <div className="h-full w-[28%] rounded-full bg-[#1DB954]/40" />
-                </div>
-                <div className="flex items-center justify-between font-grotesk text-[11px] uppercase tracking-[0.16em] text-white/40">
-                  <span>0:00</span>
-                  <span>0:00</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="flex items-center justify-between gap-4 border-t border-white/10 pt-4 font-grotesk text-[11px] uppercase tracking-[0.16em] text-white/50">
-            <span>Waiting for Spotify</span>
-            <span className="text-[#1DB954]">Inactive</span>
-          </div>
+        <div className="relative z-10 flex items-start justify-between">
+          <span className="flex h-11 w-11 items-center justify-center rounded-2xl border border-white/10 bg-white/5 text-2xl text-[#1DB954]">
+            <Icon icon="mdi:spotify" />
+          </span>
+          <Icon icon="lucide:arrow-up-right" className="text-xl text-white/60 transition-transform duration-300 group-hover:-translate-y-1 group-hover:translate-x-1 group-hover:text-white" />
         </div>
+
+        <div className="relative z-10 space-y-2">
+          <p className="font-grotesk text-[11px] uppercase tracking-[0.18em] text-white/45">Last played</p>
+          <h2 className="font-general text-[1.05rem] font-semibold leading-tight text-white/85 sm:text-[1.25rem]">
+            Spotify will show here once playback is available
+          </h2>
+          <p className="font-grotesk text-sm text-white/55 sm:text-[0.95rem]">
+            The card switches to the last played track when Spotify is inactive.
+          </p>
+        </div>
+
       </article>
     );
   }
 
-  const percentage = track.durationMs > 0 ? Math.min(100, Math.max(0, (progressMs / track.durationMs) * 100)) : 0;
-
   return (
-    <article className={`group relative overflow-hidden rounded-[1.75rem] border border-white/10 bg-[#121212] text-white shadow-[0_10px_30px_rgba(0,0,0,0.22)] ${className}`}>
+    <article className={`group relative flex min-h-[12rem] flex-col justify-between overflow-hidden rounded-[1.75rem] border border-white/10 bg-[#121212] p-5 text-white shadow-[0_10px_30px_rgba(0,0,0,0.22)] ${className}`}>
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(29,185,84,0.18),transparent_34%),radial-gradient(circle_at_bottom_left,rgba(255,255,255,0.06),transparent_30%)]" />
-      <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-[#1DB954] via-[#1ed760] to-[#1DB954] opacity-90" />
 
-      <div className="relative z-10 flex h-full flex-col gap-4 p-5 md:p-6">
-        <div className="flex items-start justify-between gap-3">
-          <div className="flex items-center gap-2 rounded-full border border-[#1DB954]/30 bg-[#1DB954]/10 px-3 py-1 font-grotesk text-[11px] uppercase tracking-[0.18em] text-[#1DB954]">
-            <span className={`h-2 w-2 rounded-full ${isPlaying ? "animate-pulse bg-[#1DB954]" : "bg-[#1DB954]/70"}`} />
-            <span>{isPlaying ? "Now playing" : "Last played"}</span>
-          </div>
+      <div className="relative z-10 flex items-start justify-between">
+        <span className="flex h-11 w-11 items-center justify-center rounded-2xl border border-white/10 bg-white/5 text-2xl text-[#1DB954]">
+          <Icon icon="mdi:spotify" />
+        </span>
 
-          <a
-            href={track.url}
-            target="_blank"
-            rel="noreferrer"
-            className="font-grotesk text-[11px] uppercase tracking-[0.18em] text-white/55 transition-colors duration-300 hover:text-white"
-          >
-            Open in Spotify
-          </a>
+        <Icon icon="lucide:arrow-up-right" className="text-xl text-white/60 transition-transform duration-300 group-hover:-translate-y-1 group-hover:translate-x-1 group-hover:text-white" />
+      </div>
+
+      <div className="relative z-10 flex items-center gap-4 sm:gap-5">
+        <div className="relative shrink-0">
+          <img
+            src={track.albumArt || Me}
+            alt={track.title}
+            crossOrigin="anonymous"
+            className="h-20 w-20 rounded-[1.125rem] object-cover ring-1 ring-white/10 sm:h-24 sm:w-24"
+          />
+          <div className="absolute inset-0 rounded-[1.125rem] shadow-[inset_0_0_0_1px_rgba(255,255,255,0.08)]" />
         </div>
 
-        <div className="flex flex-1 items-center gap-4 sm:gap-5">
-          <div className="relative shrink-0">
-            <img
-              src={track.albumArt || Me}
-              alt={track.title}
-              crossOrigin="anonymous"
-              className="h-20 w-20 rounded-[1.125rem] object-cover ring-1 ring-white/10 sm:h-24 sm:w-24"
-            />
-            <div className="absolute inset-0 rounded-[1.125rem] shadow-[inset_0_0_0_1px_rgba(255,255,255,0.08)]" />
-          </div>
-
-          <div className="min-w-0 flex-1">
-            <p className="font-grotesk text-[11px] uppercase tracking-[0.18em] text-white/50">
-              {isPlaying ? "Live playback" : "Last played"}
+        <div className="min-w-0 flex-1">
+          {!isPlaying && (
+            <p className="font-grotesk text-[11px] uppercase tracking-[0.18em] text-white/45">
+              Last played
             </p>
-            <h2 className="mt-1 truncate font-general text-[1.1rem] font-semibold leading-tight text-white sm:text-[1.35rem]">
-              {track.title}
-            </h2>
-            <p className="mt-1 truncate font-grotesk text-sm text-white/70 sm:text-[0.95rem]">
-              {track.artist}
-            </p>
+          )}
 
-            <div className="mt-4 space-y-2">
-              <div className="h-2 overflow-hidden rounded-full bg-white/10">
-                <div
-                  className="h-full rounded-full bg-[#1DB954] transition-[width] duration-1000 ease-linear"
-                  style={{ width: `${percentage}%` }}
-                />
-              </div>
-              <div className="flex items-center justify-between font-grotesk text-[11px] uppercase tracking-[0.16em] text-white/45">
-                <span>{formatTime(progressMs)}</span>
-                <span>{formatTime(track.durationMs)}</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="flex items-center justify-between gap-4 border-t border-white/10 pt-4 font-grotesk text-[11px] uppercase tracking-[0.16em] text-white/55">
-          <span>{isPlaying ? "Spotify client vibe" : "Last played from Spotify"}</span>
-          <span className="text-[#1DB954]">{isPlaying ? "Updating live" : "Inactive"}</span>
+          <h2 className="mt-1 truncate font-general text-[1.1rem] font-semibold leading-tight text-white sm:text-[1.35rem]">
+            {track.title}
+          </h2>
+          <p className="mt-1 truncate font-grotesk text-sm text-white/70 sm:text-[0.95rem]">
+            {track.artist}
+          </p>
         </div>
       </div>
     </article>
@@ -159,8 +106,6 @@ export default function Breeze() {
   const [spotify, setSpotify] = useState(defaultSpotify);
 
   useEffect(() => {
-    if (!spotify.isPlaying || !spotify.track?.durationMs) return undefined;
-
     const intervalId = window.setInterval(() => {
       setSpotify((current) => {
         if (!current.isPlaying || !current.track?.durationMs) return current;
@@ -214,7 +159,7 @@ export default function Breeze() {
     };
 
     loadSpotify();
-    const intervalId = window.setInterval(loadSpotify, 15000);
+    const intervalId = window.setInterval(loadSpotify, 1000);
 
     return () => {
       controller.abort();
@@ -327,7 +272,6 @@ export default function Breeze() {
           <SpotifyNowPlaying
             track={spotify.track}
             isPlaying={spotify.isPlaying}
-            progressMs={spotify.progressMs}
             key={spotify.track?.url || "spotify-card"}
             className="col-span-2"
           />
