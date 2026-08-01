@@ -55,10 +55,76 @@ function writeSpotifyState(state) {
   }
 }
 
-function SpotifyNowPlaying({ track, isPlaying, progressMs = 0, className = "" }) {
+async function extractAlbumAccent(imageUrl) {
+  if (typeof window === "undefined" || !imageUrl) return null;
+
+  return new Promise((resolve) => {
+    const image = new Image();
+    image.crossOrigin = "anonymous";
+    image.onload = () => {
+      try {
+        const canvas = document.createElement("canvas");
+        const size = 32;
+        canvas.width = size;
+        canvas.height = size;
+
+        const context = canvas.getContext("2d", { willReadFrequently: true });
+        if (!context) {
+          resolve(null);
+          return;
+        }
+
+        context.drawImage(image, 0, 0, size, size);
+        const { data } = context.getImageData(0, 0, size, size);
+
+        let redTotal = 0;
+        let greenTotal = 0;
+        let blueTotal = 0;
+        let weightTotal = 0;
+
+        for (let index = 0; index < data.length; index += 4) {
+          const alpha = data[index + 3] / 255;
+          if (alpha < 0.1) continue;
+
+          const red = data[index];
+          const green = data[index + 1];
+          const blue = data[index + 2];
+          const brightness = (red + green + blue) / 3;
+          const saturation = Math.max(red, green, blue) - Math.min(red, green, blue);
+          const weight = alpha * (0.55 + saturation / 255) * (0.35 + brightness / 255);
+
+          redTotal += red * weight;
+          greenTotal += green * weight;
+          blueTotal += blue * weight;
+          weightTotal += weight;
+        }
+
+        if (!weightTotal) {
+          resolve(null);
+          return;
+        }
+
+        const red = Math.round(redTotal / weightTotal);
+        const green = Math.round(greenTotal / weightTotal);
+        const blue = Math.round(blueTotal / weightTotal);
+        resolve(`rgb(${red}, ${green}, ${blue})`);
+      } catch {
+        resolve(null);
+      }
+    };
+
+    image.onerror = () => resolve(null);
+    image.src = imageUrl;
+  });
+}
+
+function SpotifyNowPlaying({ track, isPlaying, progressMs = 0, accentColor = "#121212", className = "" }) {
   if (!track?.url) {
     return (
-      <article className={`group relative flex min-h-[12rem] flex-col justify-between overflow-hidden rounded-[1.75rem] border border-white/10 bg-[#121212] p-5 text-white shadow-[0_10px_30px_rgba(0,0,0,0.22)] ${className}`}>
+      <article
+        className={`group relative flex min-h-[12rem] flex-col justify-between overflow-hidden rounded-[1.75rem] border border-white/10 p-5 text-white shadow-[0_10px_30px_rgba(0,0,0,0.22)] ${className}`}
+        style={{ backgroundColor: "#121212" }}
+      >
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(29,185,84,0.12),transparent_34%),radial-gradient(circle_at_bottom_left,rgba(255,255,255,0.04),transparent_30%)]" />
         <div className="relative z-10 flex items-start justify-end">
           <Icon icon="lucide:arrow-up-right" className="text-xl text-white/60 transition-transform duration-300 group-hover:-translate-y-1 group-hover:translate-x-1 group-hover:text-white" />
@@ -67,10 +133,10 @@ function SpotifyNowPlaying({ track, isPlaying, progressMs = 0, className = "" })
         <div className="relative z-10 space-y-2">
           <p className="font-grotesk text-[11px] uppercase tracking-[0.18em] text-white/45">Last played</p>
           <h2 className="font-general text-[1.05rem] font-semibold leading-tight text-white/85 sm:text-[1.25rem]">
-            Spotify will show here once playback is available
+            Spotify is unavailable
           </h2>
           <p className="font-grotesk text-sm text-white/55 sm:text-[0.95rem]">
-            The card switches to the last played track when Spotify is inactive.
+            Live playback is unavailable.
           </p>
         </div>
 
@@ -85,7 +151,13 @@ function SpotifyNowPlaying({ track, isPlaying, progressMs = 0, className = "" })
   const progress = track.durationMs > 0 ? Math.min(100, Math.max(0, (progressMs / track.durationMs) * 100)) : 0;
 
   return (
-    <article className={`group relative flex min-h-[12rem] flex-col justify-between overflow-hidden rounded-[1.75rem] border border-white/10 bg-[#121212] p-5 text-white shadow-[0_10px_30px_rgba(0,0,0,0.22)] ${className}`}>
+    <article
+      className={`group relative flex min-h-[12rem] flex-col justify-between overflow-hidden rounded-[1.75rem] border border-white/10 p-5 text-white shadow-[0_10px_30px_rgba(0,0,0,0.22)] ${className}`}
+      style={{
+        backgroundColor: accentColor,
+        backgroundImage: `radial-gradient(circle at top right, rgba(29, 185, 84, 0.18), transparent 34%), radial-gradient(circle at bottom left, rgba(255,255,255,0.06), transparent 30%), linear-gradient(135deg, ${accentColor}, #121212 70%)`,
+      }}
+    >
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(29,185,84,0.18),transparent_34%),radial-gradient(circle_at_bottom_left,rgba(255,255,255,0.06),transparent_30%)]" />
 
       <div className="relative z-10 flex items-start justify-end">
@@ -140,6 +212,7 @@ const defaultSpotify = {
   isPlaying: false,
   progressMs: 0,
   syncedAt: Date.now(),
+  accentColor: "#121212",
 };
 
 export default function Breeze() {
@@ -185,11 +258,14 @@ export default function Breeze() {
           return;
         }
 
+        const accentColor = (await extractAlbumAccent(track.albumArt)) || (data?.connected ? "#121212" : defaultSpotify.accentColor);
+
         setSpotify({
           track,
           isPlaying: Boolean(data?.isPlaying),
           progressMs: data?.progressMs || 0,
           syncedAt: Date.now(),
+          accentColor,
         });
 
         writeSpotifyState({
@@ -197,6 +273,7 @@ export default function Breeze() {
           isPlaying: Boolean(data?.isPlaying),
           progressMs: data?.progressMs || 0,
           syncedAt: Date.now(),
+          accentColor,
         });
       } catch (error) {
         if (error.name !== "AbortError") {
@@ -320,6 +397,7 @@ export default function Breeze() {
             track={spotify.track}
             isPlaying={spotify.isPlaying}
             progressMs={spotify.progressMs}
+            accentColor={spotify.accentColor}
             key={spotify.track?.url || "spotify-card"}
             className="col-span-2"
           />
