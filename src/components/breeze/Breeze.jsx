@@ -118,12 +118,12 @@ async function extractAlbumAccent(imageUrl) {
   });
 }
 
-function SpotifyNowPlaying({ track, isPlaying, progressMs = 0, accentColor = "#121212", className = "" }) {
+function SpotifyNowPlaying({ track, isPlaying, progressMs = 0, className = "" }) {
   if (!track?.url) {
     return (
       <article
         className={`group relative flex min-h-[12rem] flex-col justify-between overflow-hidden rounded-[1.75rem] border border-white/10 p-5 text-white shadow-[0_10px_30px_rgba(0,0,0,0.22)] ${className}`}
-        style={{ backgroundColor: "#121212" }}
+        style={{}}
       >
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(29,185,84,0.12),transparent_34%),radial-gradient(circle_at_bottom_left,rgba(255,255,255,0.04),transparent_30%)]" />
         <div className="relative z-10 flex items-start justify-end">
@@ -154,8 +154,8 @@ function SpotifyNowPlaying({ track, isPlaying, progressMs = 0, accentColor = "#1
     <article
       className={`group relative flex min-h-[12rem] flex-col justify-between overflow-hidden rounded-[1.75rem] border border-white/10 p-5 text-white shadow-[0_10px_30px_rgba(0,0,0,0.22)] ${className}`}
       style={{
-        backgroundColor: accentColor,
-        backgroundImage: `radial-gradient(circle at top right, rgba(29, 185, 84, 0.18), transparent 34%), radial-gradient(circle at bottom left, rgba(255,255,255,0.06), transparent 30%), linear-gradient(135deg, ${accentColor}, #121212 70%)`,
+        backgroundColor: spotify.accentColor,
+        backgroundImage: `linear-gradient(135deg, ${spotify.accentColor} 0%, ${spotify.accentColor} 50%, rgba(255, 255, 255, 0.05) 50%, rgba(255, 255, 255, 0.05) 100%)`,
       }}
     >
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(29,185,84,0.18),transparent_34%),radial-gradient(circle_at_bottom_left,rgba(255,255,255,0.06),transparent_30%)]" />
