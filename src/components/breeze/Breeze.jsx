@@ -27,15 +27,40 @@ function BentoLink({ href, icon, title, detail, className = "", children }) {
   );
 }
 
-function SpotifyNowPlaying({ track, isPlaying, className = "" }) {
+const spotifyStorageKey = "breeze-spotify-state";
+
+function readSpotifyState() {
+  if (typeof window === "undefined") return null;
+
+  try {
+    const rawState = window.localStorage.getItem(spotifyStorageKey);
+    if (!rawState) return null;
+
+    const parsedState = JSON.parse(rawState);
+    if (!parsedState?.track?.url) return null;
+
+    return parsedState;
+  } catch {
+    return null;
+  }
+}
+
+function writeSpotifyState(state) {
+  if (typeof window === "undefined") return;
+
+  try {
+    window.localStorage.setItem(spotifyStorageKey, JSON.stringify(state));
+  } catch {
+    // Ignore storage failures.
+  }
+}
+
+function SpotifyNowPlaying({ track, isPlaying, progressMs = 0, className = "" }) {
   if (!track?.url) {
     return (
       <article className={`group relative flex min-h-[12rem] flex-col justify-between overflow-hidden rounded-[1.75rem] border border-white/10 bg-[#121212] p-5 text-white shadow-[0_10px_30px_rgba(0,0,0,0.22)] ${className}`}>
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(29,185,84,0.12),transparent_34%),radial-gradient(circle_at_bottom_left,rgba(255,255,255,0.04),transparent_30%)]" />
-        <div className="relative z-10 flex items-start justify-between">
-          <span className="flex h-11 w-11 items-center justify-center rounded-2xl border border-white/10 bg-white/5 text-2xl text-[#1DB954]">
-            <Icon icon="mdi:spotify" />
-          </span>
+        <div className="relative z-10 flex items-start justify-end">
           <Icon icon="lucide:arrow-up-right" className="text-xl text-white/60 transition-transform duration-300 group-hover:-translate-y-1 group-hover:translate-x-1 group-hover:text-white" />
         </div>
 
@@ -49,19 +74,21 @@ function SpotifyNowPlaying({ track, isPlaying, className = "" }) {
           </p>
         </div>
 
+        <span className="absolute right-5 bottom-5 flex h-11 w-11 items-center justify-center rounded-2xl border border-white/10 bg-white/5 text-2xl text-[#1DB954] shadow-[0_0_0_1px_rgba(255,255,255,0.04)]">
+          <Icon icon="mdi:spotify" />
+        </span>
+
       </article>
     );
   }
+
+  const progress = track.durationMs > 0 ? Math.min(100, Math.max(0, (progressMs / track.durationMs) * 100)) : 0;
 
   return (
     <article className={`group relative flex min-h-[12rem] flex-col justify-between overflow-hidden rounded-[1.75rem] border border-white/10 bg-[#121212] p-5 text-white shadow-[0_10px_30px_rgba(0,0,0,0.22)] ${className}`}>
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(29,185,84,0.18),transparent_34%),radial-gradient(circle_at_bottom_left,rgba(255,255,255,0.06),transparent_30%)]" />
 
-      <div className="relative z-10 flex items-start justify-between">
-        <span className="flex h-11 w-11 items-center justify-center rounded-2xl border border-white/10 bg-white/5 text-2xl text-[#1DB954]">
-          <Icon icon="mdi:spotify" />
-        </span>
-
+      <div className="relative z-10 flex items-start justify-end">
         <Icon icon="lucide:arrow-up-right" className="text-xl text-white/60 transition-transform duration-300 group-hover:-translate-y-1 group-hover:translate-x-1 group-hover:text-white" />
       </div>
 
@@ -91,6 +118,19 @@ function SpotifyNowPlaying({ track, isPlaying, className = "" }) {
           </p>
         </div>
       </div>
+
+      {isPlaying && (
+        <div className="relative z-10 mt-4 h-[3px] overflow-hidden rounded-full bg-white/10">
+          <div
+            className="h-full rounded-full bg-[#1DB954] transition-[width] duration-700 ease-linear"
+            style={{ width: `${progress}%` }}
+          />
+        </div>
+      )}
+
+      <span className="absolute right-5 bottom-5 flex h-11 w-11 items-center justify-center rounded-2xl border border-white/10 bg-white/5 text-2xl text-[#1DB954] shadow-[0_0_0_1px_rgba(255,255,255,0.04)]">
+        <Icon icon="mdi:spotify" />
+      </span>
     </article>
   );
 }
@@ -103,7 +143,7 @@ const defaultSpotify = {
 };
 
 export default function Breeze() {
-  const [spotify, setSpotify] = useState(defaultSpotify);
+  const [spotify, setSpotify] = useState(() => readSpotifyState() || defaultSpotify);
 
   useEffect(() => {
     const intervalId = window.setInterval(() => {
@@ -146,6 +186,13 @@ export default function Breeze() {
         }
 
         setSpotify({
+          track,
+          isPlaying: Boolean(data?.isPlaying),
+          progressMs: data?.progressMs || 0,
+          syncedAt: Date.now(),
+        });
+
+        writeSpotifyState({
           track,
           isPlaying: Boolean(data?.isPlaying),
           progressMs: data?.progressMs || 0,
@@ -272,6 +319,7 @@ export default function Breeze() {
           <SpotifyNowPlaying
             track={spotify.track}
             isPlaying={spotify.isPlaying}
+            progressMs={spotify.progressMs}
             key={spotify.track?.url || "spotify-card"}
             className="col-span-2"
           />
