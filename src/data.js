@@ -5,7 +5,6 @@ import GDGImg from "./assets/images/GDG.svg";
 import QuickAirImg from "./assets/images/Quick Air.svg";
 import BallBackImg from "./assets/images/BallBack.svg";
 import OXOImg from "./assets/images/OXO.svg";
-import Folio25Img from "./assets/images/folio'25.svg";
 
 const projects = [
   {
@@ -61,15 +60,6 @@ const projects = [
     type: 'Interactive Design • UI/UX',
     year: '2025',
     tools: 'Figma Make',
-  },
-  {
-    name: "Folio'25 | Simran Nagekar",
-    link: 'https://www.simrann.dev',
-    img: Folio25Img,
-    alt: 'Folio 25 portfolio cover',
-    type: 'Portfolio • Product Design • Development',
-    year: '2025',
-    tools: 'React • GSAP • TailwindCSS • Figma',
   },
 ];
 
