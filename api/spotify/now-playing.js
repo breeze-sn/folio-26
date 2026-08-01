@@ -26,6 +26,7 @@ export default async function handler(_, response) {
         title: item.name,
         artist: item.artists?.map((artist) => artist.name).join(", ") || item.show?.name || "Spotify",
         url: item.external_urls?.spotify,
+        albumArt: item.album?.images?.[0]?.url || item.show?.images?.[0]?.url || "",
       },
     });
   } catch (error) {

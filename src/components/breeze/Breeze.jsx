@@ -1,4 +1,5 @@
 import { Icon } from "@iconify/react";
+import { useEffect, useState } from "react";
 import Me from "../../assets/images/Me-optimized.jpg";
 import Cursor from "../ui/Cursor";
 import Seo from "../ui/Seo";
@@ -95,7 +96,64 @@ function SpotifyNowPlaying({
   );
 }
 
+const defaultSpotify = {
+  songUrl: "https://open.spotify.com/user/31trbfvupfmba4dkc4o445srjxfa",
+  albumArt: Me,
+  title: "Spotify",
+  artist: "Connect Spotify to show live playback.",
+  isPlaying: false,
+};
+
 export default function Breeze() {
+  const [spotify, setSpotify] = useState(defaultSpotify);
+
+  useEffect(() => {
+    const controller = new AbortController();
+
+    const loadSpotify = async () => {
+      try {
+        const response = await fetch("/api/spotify/now-playing", {
+          signal: controller.signal,
+        });
+
+        if (!response.ok) {
+          return;
+        }
+
+        const data = await response.json();
+        const track = data?.track;
+
+        if (!track) {
+          setSpotify((current) => ({
+            ...current,
+            songUrl: data?.fallbackUrl || current.songUrl,
+            albumArt: defaultSpotify.albumArt,
+            title: "Spotify",
+            artist: data?.connected ? "No track playing right now." : "Connect Spotify to show live playback.",
+            isPlaying: Boolean(data?.isPlaying),
+          }));
+          return;
+        }
+
+        setSpotify({
+          songUrl: track.url || data?.fallbackUrl || defaultSpotify.songUrl,
+          albumArt: track.albumArt || defaultSpotify.albumArt,
+          title: track.title || defaultSpotify.title,
+          artist: track.artist || defaultSpotify.artist,
+          isPlaying: Boolean(data?.isPlaying),
+        });
+      } catch (error) {
+        if (error.name !== "AbortError") {
+          console.error("Failed to load Spotify playback:", error);
+        }
+      }
+    };
+
+    loadSpotify();
+
+    return () => controller.abort();
+  }, []);
+
   return (
     <div className="min-h-screen bg-secondary-100 px-5 py-5 text-accent-300 md:px-10 md:py-8 xl:px-20 2xl:px-28">
       <Seo
@@ -115,9 +173,9 @@ export default function Breeze() {
           <div className="relative min-h-[18rem] overflow-hidden rounded-[2rem] bg-accent-300 p-7 text-secondary-100 md:min-h-[22rem]">
             <img src={Me} alt="Simran Nagekar" className="absolute right-0 top-0 h-full w-1/2 object-cover opacity-75 mix-blend-luminosity" />
             <div className="relative flex h-full max-w-sm flex-col justify-between">
-              <span className="w-fit rounded-full border border-secondary-100/40 px-3 py-1 font-grotesk text-body-4">Hello, I&apos;m Simran</span>
+              <span className="w-fit rounded-full border border-secondary-100/40 px-3 py-1 font-grotesk text-body-4">About</span>
               <div>
-                <h1 className="text-heading-2 font-medium leading-[0.88]">Breeze</h1>
+                <h1 className="text-heading-2 font-medium leading-[0.88]">Simran Nagekar</h1>
                 <p className="mt-4 max-w-xs font-grotesk text-body-4 text-secondary-200">Product Engineer &amp; Game Designer based in Bengaluru, India.</p>
               </div>
             </div>

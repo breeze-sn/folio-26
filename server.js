@@ -5,6 +5,7 @@ import path from "path";
 import { fileURLToPath } from "url";
 import pg from "pg";
 import { Resend } from "resend";
+import spotifyNowPlayingHandler from "./api/spotify/now-playing.js";
 
 const { Pool } = pg;
 const app = express();
@@ -59,6 +60,8 @@ app.use(express.urlencoded({ extended: true }));
 app.get("/health", (_, response) => {
   response.json({ ok: true, contactServiceEnabled, contactServiceReady });
 });
+
+app.get("/api/spotify/now-playing", spotifyNowPlayingHandler);
 
 app.post("/contact", async (request, response) => {
   if (!contactServiceEnabled) {
