@@ -1,5 +1,25 @@
 import { isConfigured, requestSpotifyToken, spotifyConfig } from "./_shared.js";
 
+function mapTrack(item) {
+  return item && {
+    title: item.name,
+    artist: item.artists?.map((artist) => artist.name).join(", ") || item.show?.name || "Spotify",
+    url: item.external_urls?.spotify,
+    albumArt: item.album?.images?.[0]?.url || item.show?.images?.[0]?.url || "",
+  };
+}
+
+async function fetchMostRecentTrack(accessToken) {
+  const recentResponse = await fetch("https://api.spotify.com/v1/me/player/recently-played?limit=1", {
+    headers: { Authorization: `Bearer ${accessToken}` },
+  });
+
+  if (!recentResponse.ok) return null;
+
+  const recentPlayback = await recentResponse.json();
+  return mapTrack(recentPlayback.items?.[0]?.track);
+}
+
 export default async function handler(_, response) {
   const config = spotifyConfig();
   const baseResponse = { fallbackUrl: config.fallbackUrl };
@@ -13,21 +33,25 @@ export default async function handler(_, response) {
     const spotifyResponse = await fetch("https://api.spotify.com/v1/me/player/currently-playing", {
       headers: { Authorization: `Bearer ${token.access_token}` },
     });
-    if (spotifyResponse.status === 204) return response.status(200).json({ ...baseResponse, connected: true, isPlaying: false });
+
+    if (spotifyResponse.status === 204) {
+      const track = await fetchMostRecentTrack(token.access_token);
+      return response.status(200).json({
+        ...baseResponse,
+        connected: true,
+        isPlaying: false,
+        track,
+      });
+    }
+
     if (!spotifyResponse.ok) throw new Error(`Spotify playback request failed with status ${spotifyResponse.status}`);
 
     const playback = await spotifyResponse.json();
-    const item = playback.item;
     return response.status(200).json({
       ...baseResponse,
       connected: true,
       isPlaying: Boolean(playback.is_playing),
-      track: item && {
-        title: item.name,
-        artist: item.artists?.map((artist) => artist.name).join(", ") || item.show?.name || "Spotify",
-        url: item.external_urls?.spotify,
-        albumArt: item.album?.images?.[0]?.url || item.show?.images?.[0]?.url || "",
-      },
+      track: mapTrack(playback.item),
     });
   } catch (error) {
     console.error("Spotify playback lookup failed:", error.message);

@@ -27,81 +27,42 @@ function BentoLink({ href, icon, title, detail, className = "", children }) {
   );
 }
 
+function getSpotifyEmbedUrl(trackUrl) {
+  if (!trackUrl) return "";
+
+  try {
+    const url = new URL(trackUrl);
+    const [, type, id] = url.pathname.split("/");
+
+    if (type !== "track" || !id) return "";
+
+    return `https://open.spotify.com/embed/track/${id}`;
+  } catch {
+    return "";
+  }
+}
+
 function SpotifyNowPlaying({
   href,
-  cover,
-  track,
-  artist,
-  isPlaying,
   className = "",
 }) {
+  const embedUrl = getSpotifyEmbedUrl(href);
+
+  if (!embedUrl) return null;
+
   return (
-    <a
-      href={href}
-      target="_blank"
-      rel="noreferrer"
-      className={`group relative flex min-h-[12rem] flex-col justify-between overflow-hidden rounded-[1.75rem] border border-accent-100/25 bg-primary-100 p-5 shadow-[0_8px_0_rgba(26,26,34,0.06)] transition duration-300 hover:-translate-y-1 hover:border-secondary-600 hover:shadow-[0_16px_0_rgba(47,62,255,0.14)] ${className}`}
-    >
-      <div className="flex items-start justify-between">
-        <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[#1DB954]/15 text-[#1DB954]">
-          <Icon icon="mdi:spotify" className="text-2xl" />
-        </span>
-
-        <Icon
-          icon="lucide:arrow-up-right"
-          className="text-xl text-accent-100 transition-transform duration-300 group-hover:-translate-y-1 group-hover:translate-x-1"
-        />
-      </div>
-
-      <div className="flex items-center gap-4">
-        <img
-          src={cover}
-          alt={track}
-          className="h-16 w-16 rounded-2xl object-cover"
-        />
-
-        <div className="min-w-0 flex-1">
-          <p className="text-xs uppercase tracking-[0.12em] text-accent-100">
-            {isPlaying ? "Now Playing" : "Last Played"}
-          </p>
-
-          <h2 className="mt-1 truncate text-body-1 font-semibold text-accent-300">
-            {track}
-          </h2>
-
-          <p className="truncate text-body-4 text-accent-100">
-            {artist}
-          </p>
-        </div>
-      </div>
-
-      {isPlaying && (
-        <div className="absolute right-5 bottom-5 flex items-end gap-[3px]">
-          <span className="h-3 w-[3px] animate-pulse rounded-full bg-[#1DB954]" />
-          <span
-            className="h-5 w-[3px] animate-pulse rounded-full bg-[#1DB954]"
-            style={{ animationDelay: "0.2s" }}
-          />
-          <span
-            className="h-4 w-[3px] animate-pulse rounded-full bg-[#1DB954]"
-            style={{ animationDelay: "0.4s" }}
-          />
-          <span
-            className="h-6 w-[3px] animate-pulse rounded-full bg-[#1DB954]"
-            style={{ animationDelay: "0.1s" }}
-          />
-        </div>
-      )}
-    </a>
+    <iframe
+      title="Spotify player"
+      src={embedUrl}
+      className={`h-[152px] w-full border-0 ${className}`}
+      loading="lazy"
+      allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+    />
   );
 }
 
 const defaultSpotify = {
   songUrl: "https://open.spotify.com/user/31trbfvupfmba4dkc4o445srjxfa",
-  albumArt: Me,
-  title: "Spotify",
-  artist: "Connect Spotify to show live playback.",
-  isPlaying: false,
 };
 
 export default function Breeze() {
@@ -123,24 +84,12 @@ export default function Breeze() {
         const data = await response.json();
         const track = data?.track;
 
-        if (!track) {
-          setSpotify((current) => ({
-            ...current,
-            songUrl: data?.fallbackUrl || current.songUrl,
-            albumArt: defaultSpotify.albumArt,
-            title: "Spotify",
-            artist: data?.connected ? "No track playing right now." : "Connect Spotify to show live playback.",
-            isPlaying: Boolean(data?.isPlaying),
-          }));
+        if (!track?.url) {
           return;
         }
 
         setSpotify({
-          songUrl: track.url || data?.fallbackUrl || defaultSpotify.songUrl,
-          albumArt: track.albumArt || defaultSpotify.albumArt,
-          title: track.title || defaultSpotify.title,
-          artist: track.artist || defaultSpotify.artist,
-          isPlaying: Boolean(data?.isPlaying),
+          songUrl: track.url,
         });
       } catch (error) {
         if (error.name !== "AbortError") {
@@ -258,10 +207,6 @@ export default function Breeze() {
           />
           <SpotifyNowPlaying
             href={spotify.songUrl}
-            cover={spotify.albumArt}
-            track={spotify.title}
-            artist={spotify.artist}
-            isPlaying={spotify.isPlaying}
             className="col-span-2"
           />
 
