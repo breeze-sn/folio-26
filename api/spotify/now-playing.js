@@ -6,6 +6,7 @@ function mapTrack(item) {
     artist: item.artists?.map((artist) => artist.name).join(", ") || item.show?.name || "Spotify",
     url: item.external_urls?.spotify,
     albumArt: item.album?.images?.[0]?.url || item.show?.images?.[0]?.url || "",
+    durationMs: item.duration_ms || 0,
   };
 }
 
@@ -17,12 +18,22 @@ async function fetchMostRecentTrack(accessToken) {
   if (!recentResponse.ok) return null;
 
   const recentPlayback = await recentResponse.json();
-  return mapTrack(recentPlayback.items?.[0]?.track);
+  const recentItem = recentPlayback.items?.[0];
+  const track = mapTrack(recentItem?.track);
+
+  if (!track) return null;
+
+  return {
+    ...track,
+    playedAt: recentItem?.played_at || "",
+    progressMs: recentItem?.track?.duration_ms || track.durationMs || 0,
+  };
 }
 
 export default async function handler(_, response) {
   const config = spotifyConfig();
   const baseResponse = { fallbackUrl: config.fallbackUrl };
+  response.setHeader("Cache-Control", "no-store, max-age=0, must-revalidate");
   if (!isConfigured(config, true)) return response.status(200).json({ ...baseResponse, connected: false, isPlaying: false });
 
   try {
@@ -51,6 +62,7 @@ export default async function handler(_, response) {
       ...baseResponse,
       connected: true,
       isPlaying: Boolean(playback.is_playing),
+      progressMs: playback.progress_ms || 0,
       track: mapTrack(playback.item),
     });
   } catch (error) {
