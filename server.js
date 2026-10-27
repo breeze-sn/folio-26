@@ -6,6 +6,7 @@ import { fileURLToPath } from "url";
 import pg from "pg";
 import { Resend } from "resend";
 import spotifyNowPlayingHandler from "./api/spotify/now-playing.js";
+import gymCoachHandler from "./api/gym-coach.js";
 
 const { Pool } = pg;
 const app = express();
@@ -62,6 +63,7 @@ app.get("/health", (_, response) => {
 });
 
 app.get("/api/spotify/now-playing", spotifyNowPlayingHandler);
+app.post("/api/gym-coach", gymCoachHandler);
 
 app.post("/contact", async (request, response) => {
   if (!contactServiceEnabled) {

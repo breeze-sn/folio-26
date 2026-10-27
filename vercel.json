@@ -2,6 +2,7 @@
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
   "rewrites": [
-    { "source": "/breeze", "destination": "/index.html" }
+    { "source": "/breeze", "destination": "/index.html" },
+    { "source": "/gym", "destination": "/index.html" }
   ]
 }

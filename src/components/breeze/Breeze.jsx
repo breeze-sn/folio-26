@@ -302,7 +302,7 @@ export default function Breeze() {
       <Seo
         title="Breeze"
         description="Links, work, and small corners of the internet from Simran Nagekar."
-        url="https://simransn.tech/breeze"
+        url="https://simransn.vercel.app/breeze"
       />
       <Cursor />
 
@@ -318,7 +318,7 @@ export default function Breeze() {
             <div className="relative flex h-full max-w-sm flex-col justify-between">
               <span className="w-fit rounded-full border border-secondary-100/40 px-3 py-1 font-grotesk text-body-4">About</span>
               <div>
-                <h1 className="text-heading-2 font-medium leading-[0.88]">Simran Nagekar</h1>
+                {/* <h1 className="text-heading-2 font-medium leading-[0.88]">Simran Nagekar</h1> */}
                 <p className="mt-4 max-w-xs font-grotesk text-body-4 text-secondary-200">Product Engineer &amp; Game Designer based in Bengaluru, India.</p>
               </div>
             </div>
@@ -408,13 +408,13 @@ export default function Breeze() {
             className="col-span-2"
           />
 
-          <div className="col-span-2 flex flex-col justify-between rounded-[1.75rem] border border-dashed border-accent-100/45 p-5 md:col-span-2">
+          {/* <div className="col-span-2 flex flex-col justify-between rounded-[1.75rem] border border-dashed border-accent-100/45 p-5 md:col-span-2">
             <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-accent-300 text-2xl text-secondary-100"><Icon icon="lucide:sparkles" /></span>
             <div>
               <h2 className="text-body-1 font-semibold">Next up</h2>
               <p className="mt-1 text-body-4 text-accent-100">More games, sketches, and little experiments landing soon.</p>
             </div>
-          </div>
+          </div> */}
         </section>
 
         <footer className="mt-8 flex flex-col gap-3 border-t border-accent-100/35 pt-5 font-grotesk text-body-4 text-accent-100 sm:flex-row sm:justify-between">
