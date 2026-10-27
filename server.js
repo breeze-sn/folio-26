@@ -9,6 +9,7 @@ import pg from "pg";
 import { Resend } from "resend";
 import spotifyNowPlayingHandler from "./api/spotify/now-playing.js";
 import gymCoachHandler from "./api/gym-coach.js";
+import gymAuthHandler from "./api/_gym-auth.js";
 
 const { Pool } = pg;
 const app = express();
@@ -66,6 +67,7 @@ app.get("/health", (_, response) => {
 
 app.get("/api/spotify/now-playing", spotifyNowPlayingHandler);
 app.post("/api/gym-coach", gymCoachHandler);
+app.all("/api/gym-auth", gymAuthHandler);
 
 app.post("/contact", async (request, response) => {
   if (!contactServiceEnabled) {

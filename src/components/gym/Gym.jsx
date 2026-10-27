@@ -8,6 +8,11 @@ const storageKey = "form-gym-week-v1";
 const emptyProgress = () => ({ week: weekKey(), days: {} });
 function weekKey(date = new Date()) { const d = new Date(date); d.setHours(0, 0, 0, 0); d.setDate(d.getDate() - ((d.getDay() + 6) % 7)); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`; }
 function readProgress() { try { const saved = JSON.parse(localStorage.getItem(storageKey)); return saved?.week === weekKey() ? saved : emptyProgress(); } catch { return emptyProgress(); } }
+async function readApiJson(response, serviceName) {
+  const body = await response.text();
+  if (!body.trim()) throw new Error(`${serviceName} returned an empty response (HTTP ${response.status}). Confirm the latest app and API code are deployed.`);
+  try { return JSON.parse(body); } catch { throw new Error(`${serviceName} returned an unexpected response (HTTP ${response.status}). Confirm the latest app and API code are deployed.`); }
+}
 
 function ExerciseRow({ exercise, index, checked, onToggle }) {
   return <label className={`gym-exercise${checked ? " is-done" : ""}`}>
@@ -35,6 +40,37 @@ function DailyNotes({ day, value, onChange }) {
   </details>;
 }
 
+function GymAccessGate({ message = "", onUnlock }) {
+  const [code, setCode] = useState("");
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState(message);
+  const configurationMissing = error.toLowerCase().includes("not configured");
+
+  const submitCode = async (event) => {
+    event.preventDefault();
+    setSubmitting(true);
+    setError("");
+    try {
+      const response = await fetch("/api/gym-auth", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "same-origin",
+        body: JSON.stringify({ action: "unlock", code }),
+      });
+      const result = await readApiJson(response, "Gym access service");
+      if (!response.ok) throw new Error(result.error || "Unable to unlock FORM.");
+      setCode("");
+      onUnlock();
+    } catch (requestError) {
+      setError(requestError.message || "Could not reach the access service. Try again.");
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  return <main className="gym-lock-screen"><div className="gym-lock-card"><a className="gym-brand" href="/gym">FORM<span>®</span></a><p className="gym-eyebrow">A PRIVATE SPACE</p><h1>Good to see you.</h1><p className="gym-lock-copy">Enter your secret code to open your personal gym week.</p><form onSubmit={submitCode}><label htmlFor="gym-access-code">SECRET CODE</label><input id="gym-access-code" type="password" autoComplete="current-password" autoFocus value={code} onChange={(event) => setCode(event.target.value)} placeholder="Enter your code" required disabled={configurationMissing}/><button className="gym-lock-submit" type="submit" disabled={submitting || configurationMissing || !code}>{submitting ? "Checking…" : "Unlock FORM"}<Icon icon="ph:arrow-right"/></button></form>{error && <p className="gym-lock-error" role="alert">{error}</p>}<p className="gym-lock-foot">YOUR WEEK. YOUR SPACE.</p></div></main>;
+}
+
 function RestTimer() {
   const [seconds, setSeconds] = useState(90);
   const [running, setRunning] = useState(false);
@@ -51,11 +87,32 @@ export default function Gym() {
   const [coachReview, setCoachReview] = useState(null);
   const [coachLoading, setCoachLoading] = useState(false);
   const [coachError, setCoachError] = useState("");
+  const [authStatus, setAuthStatus] = useState("checking");
+  const [authMessage, setAuthMessage] = useState("");
   const lastDetectedDay = useRef(todayIndex);
   const workout = workouts[selected];
   const done = progress.days[selected] || [];
   const completeDays = useMemo(() => Object.entries(progress.days).filter(([day, items]) => workouts[Number(day)]?.exercises.length > 0 && workouts[Number(day)].exercises.length === items.length).length, [progress]);
   const isComplete = workout.exercises.length > 0 && done.length === workout.exercises.length;
+  useEffect(() => {
+    let alive = true;
+    fetch("/api/gym-auth", { credentials: "same-origin" })
+      .then(async (response) => {
+        const result = await readApiJson(response, "Gym access service");
+        if (!alive) return;
+        if (response.ok && result.authenticated) setAuthStatus("authenticated");
+        else {
+          setAuthStatus("locked");
+          if (response.status !== 401) setAuthMessage(result.error || "The access service is unavailable.");
+        }
+      })
+      .catch(() => {
+        if (!alive) return;
+        setAuthStatus("locked");
+        setAuthMessage("Could not reach the access service. Run the app server and try again.");
+      });
+    return () => { alive = false; };
+  }, []);
   useEffect(() => { try { localStorage.setItem(storageKey, JSON.stringify(progress)); } catch { /* Storage may be unavailable. */ } }, [progress]);
   useEffect(() => {
     const updateToday = () => {
@@ -97,7 +154,7 @@ export default function Gym() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ progress: coachProgress }),
       });
-      const result = await response.json();
+      const result = await readApiJson(response, "FORM Coach");
       if (!response.ok) throw new Error(result.error || "Could not review your progress.");
       setCoachReview(result);
     } catch (error) {
@@ -106,9 +163,15 @@ export default function Gym() {
       setCoachLoading(false);
     }
   };
+  const lockGym = async () => {
+    try { await fetch("/api/gym-auth", { method: "POST", headers: { "Content-Type": "application/json" }, credentials: "same-origin", body: JSON.stringify({ action: "logout" }) }); } finally { setAuthStatus("locked"); setCoachReview(null); }
+  };
+
+  if (authStatus === "checking") return <div className="gym-lock-screen"><div className="gym-lock-card gym-lock-checking"><span className="gym-lock-spinner"><Icon icon="ph:circle-notch"/></span><span>Opening your space…</span></div></div>;
+  if (authStatus !== "authenticated") return <GymAccessGate key={authMessage} message={authMessage} onUnlock={() => { setAuthMessage(""); setAuthStatus("authenticated"); }} />;
 
   return <div className="gym-app"><Seo title="FORM — Gym Planner" description="Your personal gym week, thoughtfully planned." url="https://simransn.vercel.app/gym" />
-    <header className="gym-header"><a className="gym-brand" href="/gym" aria-label="FORM home">FORM<span>®</span></a><span className="gym-header-subtitle">YOUR PERSONAL GYM WEEK</span><div className="gym-week-progress"><span className="gym-progress-ring">{completeDays}<small>/6</small></span><span>SESSIONS<br/>COMPLETE</span></div></header>
+    <header className="gym-header"><a className="gym-brand" href="/gym" aria-label="FORM home">FORM<span>®</span></a><span className="gym-header-subtitle">YOUR PERSONAL GYM WEEK</span><div className="gym-week-progress"><span className="gym-progress-ring">{completeDays}<small>/6</small></span><span>SESSIONS<br/>COMPLETE</span></div><button className="gym-lock-button" onClick={lockGym}><Icon icon="ph:lock-key"/> Lock</button></header>
     <main className="gym-main">
       <section className="gym-intro"><div><p className="gym-eyebrow">A PLAN THAT MEETS YOU WHERE YOU ARE</p><h1>Stronger, in<br/><em>your own shape.</em></h1><p className="gym-intro-copy">A considered week for glute and thigh development, balanced lower-body proportions, and a stronger back and posture. Move at your pace; consistency is the goal.</p></div><div className="gym-split"><div className="gym-card-label">THIS WEEK’S SPLIT</div><div><span>03</span> lower body</div><div><span>02</span> posture &amp; recovery</div><div><span>01</span> rest day</div></div></section>
       <section className="gym-week"><div className="gym-section-heading"><div><p className="gym-eyebrow">YOUR ROUTINE</p><h2>The week</h2></div><div className="gym-week-actions"><button className="gym-text-button" onClick={resetWeek}><Icon icon="ph:arrow-counter-clockwise"/> Start a new week</button><button className="gym-coach-trigger" onClick={reviewProgress} disabled={coachLoading}><Icon icon={coachLoading ? "ph:circle-notch" : "ph:sparkle"} className={coachLoading ? "gym-spin" : ""}/>{coachLoading ? "Reviewing" : "Ask FORM coach"}<Icon icon="ph:arrow-up-right"/></button></div></div><div className="gym-day-list" role="tablist" aria-label="Workout days">{workouts.map((item, index) => { const dayDone = item.exercises.length > 0 && (progress.days[index] || []).length === item.exercises.length; return <button key={item.day} role="tab" aria-selected={selected === index} className={`gym-day${selected === index ? " active" : ""}${dayDone ? " complete" : ""}`} onClick={() => { setSelected(index); setStarted(false); }}><span className="gym-day-name">{item.short}</span><span className="gym-day-title">{item.day}</span><span className="gym-day-indicator">{dayDone ? <Icon icon="ph:check-bold"/> : index === todayIndex ? <span className="gym-today-dot"/> : null}</span></button>; })}</div>

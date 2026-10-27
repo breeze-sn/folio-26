@@ -1,3 +1,5 @@
+import { isGymAuthorized } from "./_gym-auth.js";
+
 const requestTimesByIp = new Map();
 
 function cleanProgress(value) {
@@ -32,6 +34,7 @@ function getOutputText(data) {
 export default async function gymCoachHandler(request, response) {
   response.setHeader("Cache-Control", "no-store, max-age=0, must-revalidate");
   if (request.method !== "POST") return response.status(405).json({ error: "Use POST to request a progress review." });
+  if (!isGymAuthorized(request)) return response.status(401).json({ error: "Unlock the gym page before requesting a coach review." });
   if (!process.env.OPENAI_API_KEY) return response.status(503).json({ error: "The gym coach is not configured yet. Add OPENAI_API_KEY to the server environment." });
 
   const now = Date.now();
