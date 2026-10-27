@@ -4,6 +4,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import App from "./App.jsx";
 import Breeze from "./components/breeze/Breeze.jsx";
 import Gym from "./components/gym/Gym.jsx";
+import Blog from "./components/Blog.jsx";
 import Cursor from "./components/ui/Cursor.jsx";
 import { HelmetProvider } from "react-helmet-async";
 import "./index.css";
@@ -16,6 +17,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
           <Route path="/" element={<><Cursor /><App /></>} />
           <Route path="/breeze" element={<Breeze />} />
           <Route path="/gym" element={<Gym />} />
+          <Route path="/blog" element={<Blog />} />
           <Route path="*" element={<><Cursor /><App /></>} />
         </Routes>
       </BrowserRouter>

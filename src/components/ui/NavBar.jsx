@@ -4,9 +4,10 @@ import Lenis from "@studio-freight/lenis";
 
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
-export default function NavBar({ sectionRefs }) {
+export default function NavBar({ sectionRefs = [], isSubpage = false }) {
   const navBar = useRef(null);
   const cta = useRef(null);
+  const sectionHref = (section) => `${isSubpage ? "/" : ""}#${section}`;
   gsap.registerPlugin(ScrollTrigger);
 
   useEffect(() => {
@@ -81,27 +82,31 @@ export default function NavBar({ sectionRefs }) {
       ref={navBar}
       className="fixed top-0 z-50 flex w-full -translate-y-full items-center justify-between bg-secondary-100 px-3 py-3 sm:px-5"
     >
-      <a href="#hero" aria-label="Logo" className="group relative inline-flex shrink-0 items-center px-3 py-1 font-grotesk text-body-3">
+      <a href={sectionHref("hero")} aria-label="Logo" className="group relative inline-flex shrink-0 items-center px-3 py-1 font-grotesk text-body-3">
         <span>Simran Nagekar</span>
         <span className="absolute bottom-0 left-0 h-[0.125em] w-0 rounded-full bg-secondary-600 duration-300 ease-in-out group-hover:w-full"></span>
       </a>
       <nav className="flex min-w-0 flex-1 items-center justify-end gap-1 overflow-x-auto whitespace-nowrap font-grotesk text-body-3 sm:gap-0 sm:overflow-visible">
-        <a href="#about" className="group relative inline-flex items-center px-3 py-1">
+        <a href={sectionHref("about")} className="group relative inline-flex items-center px-3 py-1">
           <span>about</span>
           <span className="absolute bottom-0 left-0 h-[0.125em] w-0 rounded-full bg-secondary-600 duration-300 ease-in-out group-hover:w-full"></span>
         </a>
-        <a href="#services" className="group relative inline-flex items-center px-3 py-1">
+        <a href={sectionHref("services")} className="group relative inline-flex items-center px-3 py-1">
           <span>services</span>
           <span className="absolute bottom-0 left-0 h-[0.125em] w-0 rounded-full bg-secondary-600 duration-300 ease-in-out group-hover:w-full"></span>
         </a>
-        <a href="#works" className="group relative inline-flex items-center px-3 py-1">
+        <a href={sectionHref("works")} className="group relative inline-flex items-center px-3 py-1">
           <span>projects</span>
+          <span className="absolute bottom-0 left-0 h-[0.125em] w-0 rounded-full bg-secondary-600 duration-300 ease-in-out group-hover:w-full"></span>
+        </a>
+        <a href="/blog" className="group relative inline-flex items-center px-3 py-1">
+          <span>blog</span>
           <span className="absolute bottom-0 left-0 h-[0.125em] w-0 rounded-full bg-secondary-600 duration-300 ease-in-out group-hover:w-full"></span>
         </a>
         <a
           ref={cta}
           className="button group relative hover:bg-transparent"
-          href="#contact"
+          href={sectionHref("contact")}
         >
           <span className="relative w-fit">
             <span className="absolute bottom-2 h-[0.15em] w-0 bg-secondary-700 opacity-90 duration-300 ease-out group-hover:w-full"></span>

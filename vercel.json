@@ -3,6 +3,7 @@
   "outputDirectory": "dist",
   "rewrites": [
     { "source": "/breeze", "destination": "/index.html" },
-    { "source": "/gym", "destination": "/index.html" }
+    { "source": "/gym", "destination": "/index.html" },
+    { "source": "/blog", "destination": "/index.html" }
   ]
 }

@@ -33,6 +33,7 @@ async function build() {
 
   const urls = [
     { loc: `${baseUrl}/`, lastmod: formatDate() },
+    { loc: `${baseUrl}/blog`, lastmod: formatDate() },
     // include project links if they are internal
     ...projects
       .filter((p) => p.link && p.link.startsWith(baseUrl))
