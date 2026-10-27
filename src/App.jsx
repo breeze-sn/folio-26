@@ -53,8 +53,8 @@ const App = () => {
       <Seo
         title={"Home"}
         description={"Portfolio of Simran Nagekar — Game & Product Designer based in Bangalore, India."}
-        image={"https://simransn.tech/og-image.svg"}
-        url={"https://simransn.tech/"}
+        image={"https://simransn.vercel.app/og-image.svg"}
+        url={"https://simransn.vercel.app/"}
       />
       <NavBar sectionRefs={sectionRefs.current} />{" "}
       {/* passing sectionRefs props to give access to Navbar, Navbar can then access the props which have access to the array of sectionRef and loop over it */}

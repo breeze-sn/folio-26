@@ -2,7 +2,7 @@ import fs from "fs";
 import path from "path";
 
 const outPath = path.resolve("public/sitemap.xml");
-const baseUrl = "https://simransn.tech";
+const baseUrl = "https://simransn.vercel.app";
 
 function loadProjects() {
   try {
