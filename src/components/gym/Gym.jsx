@@ -19,6 +19,22 @@ function ExerciseRow({ exercise, index, checked, onToggle }) {
   </label>;
 }
 
+function DailyNotes({ day, value, onChange }) {
+  return <details className="gym-side-card gym-personal-notes">
+    <summary><span className="gym-card-label">YOUR NOTES <Icon icon="ph:plus" /></span></summary>
+    <label className="gym-notes-label" htmlFor="gym-daily-notes">{day} · PERSONAL LOG</label>
+    <textarea
+      id="gym-daily-notes"
+      value={value}
+      onChange={(event) => onChange(event.target.value)}
+      placeholder="What did you do today? Note weights, reps, how it felt, or anything to remember."
+      maxLength={240}
+      rows={5}
+    />
+    <p className="gym-notes-saved"><span><Icon icon="ph:lock-simple" /> Saved here · shared with OpenAI only when requested</span><small>{value.length}/240</small></p>
+  </details>;
+}
+
 function RestTimer() {
   const [seconds, setSeconds] = useState(90);
   const [running, setRunning] = useState(false);
@@ -58,6 +74,7 @@ export default function Gym() {
   const setDone = (index, checked) => setProgress((current) => { const days = { ...current.days }; const list = new Set(days[selected] || []); checked ? list.add(index) : list.delete(index); days[selected] = [...list].sort((a, b) => a - b); return { ...current, days }; });
   const resetSession = () => { if (!window.confirm(`Reset ${workout.day}'s session? This will clear its exercise progress.`)) return; setProgress((current) => { const days = { ...current.days }; delete days[selected]; return { ...current, days }; }); setStarted(false); };
   const resetWeek = () => { if (!window.confirm("Start a new week? All saved workout progress will be cleared.")) return; setProgress(emptyProgress()); setStarted(false); };
+  const saveDailyNote = (note) => setProgress((current) => ({ ...current, notes: { ...current.notes, [selected]: note } }));
   const reviewProgress = async () => {
     setCoachLoading(true);
     setCoachError("");
@@ -70,6 +87,9 @@ export default function Gym() {
         completedExercises: (progress.days[index] || []).map((exerciseIndex) => item.exercises[exerciseIndex]?.[0]).filter(Boolean),
         totalExercises: item.exercises.length,
       })),
+      notes: Object.entries(progress.notes || {})
+        .map(([dayIndex, note]) => ({ day: workouts[Number(dayIndex)]?.day, note: String(note).trim() }))
+        .filter((entry) => entry.day && entry.note),
     };
     try {
       const response = await fetch("/api/gym-coach", {
@@ -92,7 +112,7 @@ export default function Gym() {
     <main className="gym-main">
       <section className="gym-intro"><div><p className="gym-eyebrow">A PLAN THAT MEETS YOU WHERE YOU ARE</p><h1>Stronger, in<br/><em>your own shape.</em></h1><p className="gym-intro-copy">A considered week for glute and thigh development, balanced lower-body proportions, and a stronger back and posture. Move at your pace; consistency is the goal.</p></div><div className="gym-split"><div className="gym-card-label">THIS WEEK’S SPLIT</div><div><span>03</span> lower body</div><div><span>02</span> posture &amp; recovery</div><div><span>01</span> rest day</div></div></section>
       <section className="gym-week"><div className="gym-section-heading"><div><p className="gym-eyebrow">YOUR ROUTINE</p><h2>The week</h2></div><div className="gym-week-actions"><button className="gym-text-button" onClick={resetWeek}><Icon icon="ph:arrow-counter-clockwise"/> Start a new week</button><button className="gym-coach-trigger" onClick={reviewProgress} disabled={coachLoading}><Icon icon={coachLoading ? "ph:circle-notch" : "ph:sparkle"} className={coachLoading ? "gym-spin" : ""}/>{coachLoading ? "Reviewing" : "Ask FORM coach"}<Icon icon="ph:arrow-up-right"/></button></div></div><div className="gym-day-list" role="tablist" aria-label="Workout days">{workouts.map((item, index) => { const dayDone = item.exercises.length > 0 && (progress.days[index] || []).length === item.exercises.length; return <button key={item.day} role="tab" aria-selected={selected === index} className={`gym-day${selected === index ? " active" : ""}${dayDone ? " complete" : ""}`} onClick={() => { setSelected(index); setStarted(false); }}><span className="gym-day-name">{item.short}</span><span className="gym-day-title">{item.day}</span><span className="gym-day-indicator">{dayDone ? <Icon icon="ph:check-bold"/> : index === todayIndex ? <span className="gym-today-dot"/> : null}</span></button>; })}</div>
-        {(coachReview || coachError || coachLoading) && <div className="gym-coach-card" aria-live="polite"><div className="gym-coach-mark"><Icon icon="ph:sparkle"/></div><div className="gym-coach-content">{coachLoading ? <><p className="gym-eyebrow">FORM COACH</p><h3>Looking over your week…</h3><p className="gym-coach-muted">Checking the sessions and exercises you’ve marked complete.</p></> : coachError ? <><p className="gym-eyebrow">FORM COACH</p><h3>Couldn’t load your review.</h3><p className="gym-coach-muted">{coachError}</p><button className="gym-text-button" onClick={reviewProgress}>Try again</button></> : <><p className="gym-eyebrow">A LOOK AT YOUR WEEK · OPENAI</p><h3>{coachReview.headline}</h3><div className="gym-coach-columns">{coachReview.observations?.length > 0 && <div><small>WHAT I NOTICE</small><ul>{coachReview.observations.map((item, index) => <li key={index}>{item}</li>)}</ul></div>}{coachReview.nextSteps?.length > 0 && <div><small>GOOD NEXT STEPS</small><ul>{coachReview.nextSteps.map((item, index) => <li key={index}>{item}</li>)}</ul></div>}</div><p className="gym-coach-add"><Icon icon="ph:plus-circle"/><span><strong>Something to add</strong>{coachReview.addNext}</span></p><p className="gym-coach-disclaimer">Based on this week’s check-offs only. Your weights and effort aren’t tracked, so treat these as general ideas.</p></>}</div></div>}
+        {(coachReview || coachError || coachLoading) && <div className="gym-coach-card" aria-live="polite"><div className="gym-coach-mark"><Icon icon="ph:sparkle"/></div><div className="gym-coach-content">{coachLoading ? <><p className="gym-eyebrow">FORM COACH</p><h3>Looking over your week…</h3><p className="gym-coach-muted">Checking this week’s sessions and notes.</p></> : coachError ? <><p className="gym-eyebrow">FORM COACH</p><h3>Couldn’t load your review.</h3><p className="gym-coach-muted">{coachError}</p><button className="gym-text-button" onClick={reviewProgress}>Try again</button></> : <><p className="gym-eyebrow">A LOOK AT YOUR WEEK · OPENAI</p><h3>{coachReview.headline}</h3><div className="gym-coach-columns">{coachReview.observations?.length > 0 && <div><small>WHAT I NOTICE</small><ul>{coachReview.observations.map((item, index) => <li key={index}>{item}</li>)}</ul></div>}{coachReview.nextSteps?.length > 0 && <div><small>GOOD NEXT STEPS</small><ul>{coachReview.nextSteps.map((item, index) => <li key={index}>{item}</li>)}</ul></div>}</div><p className="gym-coach-add"><Icon icon="ph:plus-circle"/><span><strong>Something to add</strong>{coachReview.addNext}</span></p><p className="gym-coach-disclaimer">Based on your notes and check-offs for this week. Weights and effort aren’t tracked, so the coach won’t infer strength gains.</p></>}</div></div>}
       </section>
       <section className="gym-workout-layout" role="tabpanel">
         <div className="gym-workout-main"><div className="gym-workout-top"><div><p className="gym-eyebrow">{workout.day.toUpperCase()} · {workout.category.toUpperCase()}</p><h2>{workout.title}</h2><p className="gym-workout-sub">{workout.day === "Sunday" ? "Make room for recovery." : workout.day === "Thursday" || workout.day === "Saturday" ? "A little movement goes a long way." : "Steady effort. Good form. Your own pace."}</p></div>{workout.duration && <div className="gym-duration"><span>{workout.duration}</span><small>MIN APPROX.</small></div>}</div>
@@ -101,6 +121,7 @@ export default function Gym() {
         </div>
         <aside className="gym-sidebar">{workout.exercises.length > 0 && <><div className="gym-side-card"><div className="gym-card-label">A NOTE FOR TODAY <Icon icon="ph:lightbulb"/></div><p>{workout.tip}</p></div><div className="gym-side-card"><div className="gym-card-label">REST BETWEEN SETS <Icon icon="ph:hourglass"/></div><p>90–120 sec after bigger lifts.<br/>45–75 sec for accessories.<br/><span>Adjust as you need.</span></p></div><RestTimer/></>}
           <details className="gym-side-card gym-guidance"><summary><span className="gym-card-label">TRAINING NOTES <Icon icon="ph:plus"/></span></summary><ul><li>Warm up 5–8 minutes before strength training.</li><li>Start light while learning technique; finish most sets with 2–4 good reps left.</li><li>Increase weight gradually when your form is consistent.</li><li>Allow recovery between hard lower-body sessions.</li><li>Eat regular meals with adequate protein, drink water, and sleep well. Avoid unnecessary calorie restriction when building muscle.</li></ul><p className="gym-safety"><strong>A note on asthma</strong><br/>Follow your prescribed asthma-management plan and keep your prescribed reliever accessible. Stop if you experience wheezing, chest tightness, or unusual breathlessness.</p></details>
+          <DailyNotes day={workout.day} value={progress.notes?.[selected] || ""} onChange={saveDailyNote}/>
         </aside>
       </section>
       <footer className="gym-footer"><span>FORM · MADE FOR YOUR OWN PACE</span><span>ONE SESSION AT A TIME.</span></footer>
