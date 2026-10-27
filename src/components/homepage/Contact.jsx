@@ -7,7 +7,8 @@ import Heading from "../ui/Heading";
 export default function Contact() {
   const [time, setTime] = useState(new Date().toLocaleTimeString());
   const [submissionStatus, setSubmissionStatus] = useState("idle");
-  const contactApiUrl = "/contact";
+  const [submissionError, setSubmissionError] = useState("");
+  const contactApiUrl = "/api/contact";
   const typeformUrl = "https://form.typeform.com/to/Q0LLEnXM";
 
   const heading = useRef(null)
@@ -48,6 +49,7 @@ export default function Contact() {
     const payload = Object.fromEntries(formData.entries());
 
     setSubmissionStatus("sending");
+    setSubmissionError("");
 
     try {
       const response = await fetch(contactApiUrl, {
@@ -58,14 +60,14 @@ export default function Contact() {
         body: JSON.stringify(payload),
       });
 
-      if (!response.ok) {
-        throw new Error(`Request failed with status ${response.status}`);
-      }
+      const result = await response.json().catch(() => ({}));
+      if (!response.ok) throw new Error(result.message || `Request failed with status ${response.status}`);
 
       formRef.current?.reset();
       setSubmissionStatus("success");
     } catch (error) {
       console.error(error);
+      setSubmissionError(error.message || "Something went wrong. Please try again or use Typeform.");
       setSubmissionStatus("error");
     }
   };
@@ -169,7 +171,7 @@ export default function Contact() {
             </div>
             <p className="mt-4 min-h-6 text-body-4 text-secondary-600">
               {submissionStatus === "success" && "Message sent. I’ll get back to you soon."}
-              {submissionStatus === "error" && "Something went wrong. Please try again or use Typeform."}
+              {submissionStatus === "error" && (submissionError || "Something went wrong. Please try again or use Typeform.")}
             </p>
           </form>
           <iframe

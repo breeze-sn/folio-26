@@ -1,7 +1,8 @@
 import { createHmac, timingSafeEqual } from "node:crypto";
 
 const cookieName = "form_gym_session";
-const sessionDuration = 30 * 24 * 60 * 60;
+// Keep this browser signed in for a year so the gym page is ready on return visits.
+const sessionDuration = 365 * 24 * 60 * 60;
 
 function signature(expiresAt, accessCode) {
   return createHmac("sha256", accessCode).update(`form-gym:${expiresAt}`).digest("base64url");
