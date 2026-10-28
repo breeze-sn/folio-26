@@ -36,12 +36,12 @@ export default async function gymAuthHandler(request, response) {
   const accessCode = process.env.GYM_ACCESS_CODE;
 
   if (request.method === "GET") {
-    if (!accessCode) return response.status(503).json({ authenticated: false, error: "Gym access is not configured on the server yet." });
+    if (!accessCode) return response.status(503).json({ authenticated: false, error: "Gym access is not configured. Add GYM_ACCESS_CODE to the current environment." });
     return response.status(isGymAuthorized(request) ? 200 : 401).json({ authenticated: isGymAuthorized(request) });
   }
 
   if (request.method !== "POST") return response.status(405).json({ error: "Use POST to unlock or lock the gym page." });
-  if (!accessCode) return response.status(503).json({ error: "Gym access is not configured on the server yet." });
+  if (!accessCode) return response.status(503).json({ error: "Gym access is not configured. Add GYM_ACCESS_CODE to the current environment." });
 
   const now = Date.now();
   const ip = request.headers["x-forwarded-for"]?.split(",")[0]?.trim() || request.socket?.remoteAddress || "unknown";

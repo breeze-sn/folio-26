@@ -104,3 +104,9 @@
 .gym-lock-button{display:flex;align-items:center;gap:6px;margin-left:20px;padding:8px 0;border:0;background:transparent;color:#A0A0A0;font-size:9px;cursor:pointer}
 .gym-lock-button:hover{color:#F5F5F5}.gym-lock-button svg{font-size:13px}
 @media(max-width:640px){.gym-lock-screen{padding:20px}.gym-lock-card{padding:27px 23px}.gym-lock-card>.gym-brand{margin-bottom:38px}.gym-lock-button{margin-left:8px;font-size:8px}}
+
+/* Session timing stays quiet and monochrome with the FORM interface. */
+.gym-cooldown{margin-top:22px;padding:16px 18px;border-left:2px solid #777;background:#151515}
+.gym-cooldown-label{color:#BDBDBD;font-size:8px;font-weight:600;letter-spacing:.14em}
+.gym-cooldown p{margin:7px 0 0;color:#BDBDBD;font-size:10px;line-height:1.7}
+@media(max-width:640px){.gym-cooldown{margin-top:18px;padding:14px}}
