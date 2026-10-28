@@ -26,6 +26,30 @@
       <link rel="preload" as="image" href="/og-image.svg" />
     <title>Simran Nagekar</title>
     <link rel="icon" type="image/gif" href="/favicon.gif?v=2">
+    <script>
+      (() => {
+        if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+        const icon = document.querySelector('link[rel="icon"][type="image/gif"]');
+        if (!icon) return;
+
+        const animatedImage = new Image();
+        animatedImage.src = icon.href;
+        animatedImage.onload = () => {
+          const canvas = document.createElement("canvas");
+          canvas.width = 16;
+          canvas.height = 16;
+          const context = canvas.getContext("2d");
+          if (!context) return;
+
+          window.setInterval(() => {
+            context.clearRect(0, 0, canvas.width, canvas.height);
+            context.drawImage(animatedImage, 0, 0, canvas.width, canvas.height);
+            icon.type = "image/png";
+            icon.href = canvas.toDataURL("image/png");
+          }, 100);
+        };
+      })();
+    </script>
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
