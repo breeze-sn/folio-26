@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 
-export default function Cursor() {
+export default function Cursor({ className = "" }) {
   const curs = useRef(null);
   const svg = useRef(null);
   const posRef = useRef({ x: 0, y: 0 });
@@ -63,7 +63,7 @@ export default function Cursor() {
   return (
     <div
       ref={curs}
-      className="cursor pointer-events-none fixed left-1/2 top-1/2 z-[999] hidden h-3 w-3 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-secondary-600 sm:flex"
+      className={`cursor pointer-events-none fixed left-1/2 top-1/2 z-[999] hidden h-3 w-3 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-secondary-600 sm:flex ${className}`}
       style={{ left: "50%", top: "50%" }}
     >
       <svg

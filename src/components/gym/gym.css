@@ -110,3 +110,13 @@
 .gym-cooldown-label{color:#BDBDBD;font-size:8px;font-weight:600;letter-spacing:.14em}
 .gym-cooldown p{margin:7px 0 0;color:#BDBDBD;font-size:10px;line-height:1.7}
 @media(max-width:640px){.gym-cooldown{margin-top:18px;padding:14px}}
+
+.gym-app .gym-cursor,.gym-lock-screen .gym-cursor{display:none;background:#F5F5F5;color:#0A0A0A}
+.gym-app .gym-cursor svg,.gym-lock-screen .gym-cursor svg{color:#0A0A0A}
+@media(min-width:1024px) and (hover:hover) and (pointer:fine){
+  .gym-app *,.gym-lock-screen *{cursor:none!important}
+  .gym-app .gym-cursor,.gym-lock-screen .gym-cursor{display:flex}
+}
+@media(max-width:1023px),(hover:none),(pointer:coarse){
+  .gym-app *,.gym-lock-screen *{cursor:auto!important}
+}

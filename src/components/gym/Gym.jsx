@@ -1,5 +1,6 @@
 import { Icon } from "@iconify/react";
 import { useEffect, useMemo, useRef, useState } from "react";
+import Cursor from "../ui/Cursor";
 import Seo from "../ui/Seo";
 import { workouts } from "./workouts";
 import "./gym.css";
@@ -80,7 +81,7 @@ function GymAccessGate({ message = "", onUnlock }) {
     }
   };
 
-  return <main className="gym-lock-screen"><div className="gym-lock-card"><a className="gym-brand" href="/gym">FORM<span>®</span></a><p className="gym-eyebrow">A PRIVATE SPACE</p><h1>Good to see you.</h1><p className="gym-lock-copy">Enter your secret code to open your personal gym week.</p><form onSubmit={submitCode}><label htmlFor="gym-access-code">SECRET CODE</label><input id="gym-access-code" type="password" autoComplete="current-password" autoFocus value={code} onChange={(event) => setCode(event.target.value)} placeholder="Enter your code" required disabled={configurationMissing}/><button className="gym-lock-submit" type="submit" disabled={submitting || configurationMissing || !code}>{submitting ? "Checking…" : "Unlock FORM"}<Icon icon="ph:arrow-right"/></button></form>{error && <p className="gym-lock-error" role="alert">{error}</p>}<p className="gym-lock-foot">YOUR WEEK. YOUR SPACE.</p></div></main>;
+  return <main className="gym-lock-screen"><Cursor className="gym-cursor"/><div className="gym-lock-card"><a className="gym-brand" href="/gym">FORM<span>®</span></a><p className="gym-eyebrow">A PRIVATE SPACE</p><h1>Good to see you.</h1><p className="gym-lock-copy">Enter your secret code to open your personal gym week.</p><form onSubmit={submitCode}><label htmlFor="gym-access-code">SECRET CODE</label><input id="gym-access-code" type="password" autoComplete="current-password" autoFocus value={code} onChange={(event) => setCode(event.target.value)} placeholder="Enter your code" required disabled={configurationMissing}/><button className="gym-lock-submit" type="submit" disabled={submitting || configurationMissing || !code}>{submitting ? "Checking…" : "Unlock FORM"}<Icon icon="ph:arrow-right"/></button></form>{error && <p className="gym-lock-error" role="alert">{error}</p>}<p className="gym-lock-foot">YOUR WEEK. YOUR SPACE.</p></div></main>;
 }
 
 function RestTimer() {
@@ -179,10 +180,10 @@ export default function Gym() {
     try { await fetch("/api/gym-auth", { method: "POST", headers: { "Content-Type": "application/json" }, credentials: "same-origin", body: JSON.stringify({ action: "logout" }) }); } finally { setAuthStatus("locked"); setCoachReview(null); }
   };
 
-  if (authStatus === "checking") return <div className="gym-lock-screen"><div className="gym-lock-card gym-lock-checking"><span className="gym-lock-spinner"><Icon icon="ph:circle-notch"/></span><span>Opening your space…</span></div></div>;
+  if (authStatus === "checking") return <div className="gym-lock-screen"><Cursor className="gym-cursor"/><div className="gym-lock-card gym-lock-checking"><span className="gym-lock-spinner"><Icon icon="ph:circle-notch"/></span><span>Opening your space…</span></div></div>;
   if (authStatus !== "authenticated") return <GymAccessGate key={authMessage} message={authMessage} onUnlock={() => { setAuthMessage(""); setAuthStatus("authenticated"); }} />;
 
-  return <div className="gym-app"><Seo title="FORM — Gym Planner" description="Your personal gym week, thoughtfully planned." url="https://simransn.vercel.app/gym" />
+  return <div className="gym-app"><Cursor className="gym-cursor"/><Seo title="FORM — Gym Planner" description="Your personal gym week, thoughtfully planned." url="https://simransn.vercel.app/gym" />
     <header className="gym-header"><a className="gym-brand" href="/gym" aria-label="FORM home">FORM<span>®</span></a><span className="gym-header-subtitle">YOUR PERSONAL GYM WEEK</span><div className="gym-week-progress"><span className="gym-progress-ring">{completeDays}<small>/6</small></span><span>SESSIONS<br/>COMPLETE</span></div><button className="gym-lock-button" onClick={lockGym}><Icon icon="ph:lock-key"/> Lock</button></header>
     <main className="gym-main">
       <section className="gym-intro"><div><p className="gym-eyebrow">A PLAN THAT MEETS YOU WHERE YOU ARE</p><h1>Stronger, in<br/><em>your own shape.</em></h1><p className="gym-intro-copy">A considered week for lower-body growth, posture, and comfortable movement. Each active day has a 60-minute target that includes rest and recovery. Move at your pace; consistency is the goal.</p></div><div className="gym-split"><div className="gym-card-label">THIS WEEK’S SPLIT</div><div><span>03</span> lower-body growth</div><div><span>03</span> strength, stability &amp; recovery</div><div><span>01</span> rest day</div></div></section>
