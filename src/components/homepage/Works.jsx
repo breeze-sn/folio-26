@@ -32,6 +32,8 @@ export default function Works({ forwardedRef }) {
               type={project.type}
               year={project.year}
               tools={project.tools}
+              visual={project.visual}
+              status={project.status}
             />
           </div>
         ))}
