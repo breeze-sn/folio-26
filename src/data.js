@@ -8,6 +8,16 @@ import OXOImg from "./assets/images/OXO.svg";
 
 const projects = [
   {
+    name: 'Atria',
+    link: 'https://atriastudio.vercel.app',
+    visual: 'atria',
+    alt: 'Atria design system studio product preview',
+    type: 'Product Design • Design Systems',
+    year: '2026',
+    tools: 'Components • Design Tokens • UI Systems',
+    status: 'In Progress',
+  },
+  {
     name: 'ByteMe',
     link: 'https://breeze-sn.github.io/ByteMe/',
     img: ByteMeImg,
