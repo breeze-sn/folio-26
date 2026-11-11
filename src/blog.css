@@ -40,3 +40,27 @@
 .blog-page .blog-card-cover{transform:scale(1);transform-origin:right center;transition:transform .7s ease-in-out}
 .blog-page .group:hover .blog-card-cover,.blog-page .group:focus-visible .blog-card-cover{transform:scale(1.05)}
 .blog-page .blog-card-image+div{position:relative;z-index:1;background:#FAFAFA}
+
+
+/* Publication cover variations — shared typography and card hover, distinct visual systems */
+.blog-page .blog-cover-report{color:#e8ecff;background:#171c35}
+.blog-page .blog-cover-report::before{background-image:linear-gradient(rgba(205,215,255,.09) 1px,transparent 1px),linear-gradient(90deg,rgba(205,215,255,.09) 1px,transparent 1px);background-size:28px 28px}
+.blog-page .blog-cover-report .blog-cover-orbit{top:15%;right:13%;width:46%;border-color:#a8b6ff;opacity:.7;box-shadow:0 0 0 16px rgba(168,182,255,.1),0 0 0 34px rgba(168,182,255,.06)}
+.blog-page .blog-cover-report .blog-cover-square{right:30%;bottom:18%;width:15%;background:#788cff;transform:rotate(45deg)}
+.blog-page .blog-cover-allocation{color:#193b35;background:#dcebe4}
+.blog-page .blog-cover-allocation::before{background-image:linear-gradient(30deg,transparent 48%,rgba(25,59,53,.12) 49%,rgba(25,59,53,.12) 50%,transparent 51%);background-size:34px 34px}
+.blog-page .blog-cover-allocation .blog-cover-orbit{top:14%;right:10%;width:42%;border:2px dashed currentColor;opacity:.38;box-shadow:0 0 0 12px rgba(25,59,53,.06),0 0 0 26px rgba(25,59,53,.04)}
+.blog-page .blog-cover-allocation .blog-cover-square{right:25%;bottom:20%;width:17%;height:17%;aspect-ratio:auto;transform:rotate(12deg);border-radius:50% 50% 8% 50%;background:#76a997}
+.blog-page .blog-cover-procurement{color:#392d20;background:#eee4d5}
+.blog-page .blog-cover-procurement::before{background-image:repeating-linear-gradient(90deg,rgba(57,45,32,.09) 0,rgba(57,45,32,.09) 1px,transparent 1px,transparent 42px);background-size:auto}
+.blog-page .blog-cover-procurement .blog-cover-orbit{top:21%;right:15%;width:33%;border-radius:12%;transform:rotate(28deg);border-width:2px;opacity:.45;box-shadow:0 0 0 14px rgba(57,45,32,.06),0 0 0 28px rgba(57,45,32,.04)}
+.blog-page .blog-cover-procurement .blog-cover-square{right:27%;bottom:20%;width:12%;transform:rotate(0);background:#c28f57}
+.blog-page .blog-cover-learning{color:#34254a;background:#e9e0f1}
+.blog-page .blog-cover-learning::before{background-image:radial-gradient(rgba(52,37,74,.14) 1px,transparent 1px);background-size:16px 16px}
+.blog-page .blog-cover-learning .blog-cover-orbit{top:12%;right:18%;width:40%;border-width:3px;opacity:.3;box-shadow:inset 0 0 0 14px rgba(52,37,74,.06),0 0 0 18px rgba(52,37,74,.05)}
+.blog-page .blog-cover-learning .blog-cover-square{right:29%;bottom:17%;width:14%;border-radius:50%;transform:rotate(0);background:#a88bc5}
+.blog-page .blog-card-cover{min-height:250px}
+.blog-page .blog-card-image{border-radius:1rem 1rem 0 0}
+.blog-page .group:hover .blog-card-cover .blog-cover-orbit{transform:scale(1.08);transition:transform .7s ease}
+.blog-page .group:hover .blog-card-cover .blog-cover-square{transform:rotate(35deg) scale(1.12);transition:transform .7s ease}
+@media(min-width:768px){.blog-page .blog-card-cover{min-height:290px}}
