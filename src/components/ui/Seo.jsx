@@ -1,23 +1,24 @@
 import { Helmet } from "react-helmet-async";
 
-export default function Seo({ title, description, image, url, author }) {
+export default function Seo({ title, description, image, url, author, robots }) {
   const siteTitle = "Simran Nagekar — Game & Product Designer";
   const pageTitle = title ? `${title} | ${siteTitle}` : siteTitle;
 
   return (
     <Helmet>
       <title>{pageTitle}</title>
-      <meta name="description" content={description} />
-      <meta name="author" content={author || "Simran Nagekar"} />
+      {description && <meta name="description" content={description} />}
+      {author && <meta name="author" content={author} />}
+      {robots && <meta name="robots" content={robots} />}
 
-      <meta property="og:title" content={pageTitle} />
-      <meta property="og:description" content={description} />
+      {description && <meta property="og:title" content={pageTitle} />}
+      {description && <meta property="og:description" content={description} />}
       {image && <meta property="og:image" content={image} />}
       {url && <meta property="og:url" content={url} />}
 
-      <meta name="twitter:card" content="summary_large_image" />
-      <meta name="twitter:title" content={pageTitle} />
-      <meta name="twitter:description" content={description} />
+      {description && <meta name="twitter:card" content="summary_large_image" />}
+      {description && <meta name="twitter:title" content={pageTitle} />}
+      {description && <meta name="twitter:description" content={description} />}
       {image && <meta name="twitter:image" content={image} />}
     </Helmet>
   );
