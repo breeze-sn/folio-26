@@ -11,7 +11,7 @@ const articles = [
   {
     number: "01",
     category: "DESIGN · AI · BUILD",
-    date: "2026",
+    date: "MEDIUM",
     title: "From Figma to Production with AI: A Designer’s Guide to Building and Deploying a Real Product",
     summary: "A practical guide to taking a design beyond the canvas with AI, turning a Figma concept into a working product and getting it deployed.",
     href: "https://medium.com/@breezesn/7deb95ad2930",
@@ -39,7 +39,7 @@ const articles = [
     coverLabel: ["HOSPITAL AI", "2027"],
   },
   {
-    number: "06",
+    number: "04",
     category: "ARTICLE",
     date: "OCT 28, 2026",
     title: "Hospital AI Budget 2027: Where to Invest and How to Choose",
@@ -49,7 +49,7 @@ const articles = [
     coverLabel: ["BETTER", "ALLOCATION"],
   },
   {
-    number: "06",
+    number: "05",
     category: "ARTICLE",
     date: "OCT 28, 2026",
     title: "What Factors Influence Hospital Procurement Decisions for Surgical Analytics Platforms?",
