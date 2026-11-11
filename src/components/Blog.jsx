@@ -98,7 +98,7 @@ export default function Blog() {
       <Cursor />
       <Seo title="Writing" url="https://simransn.vercel.app/blog" robots="noindex, nofollow" />
       <NavBar isSubpage />
-      <main className="blog-main mx-auto flex w-full max-w-none flex-1 flex-col px-4 sm:px-5 xl:px-6">
+      <main className="blog-main mx-auto flex w-full flex-1 flex-col px-5 md:px-10 xl:px-20 2xl:px-28">
         <section aria-labelledby="blog-title" className="blog-hero">
           <div className="blog-hero-context">
             <p className="blog-eyebrow">A COLLECTION OF NOTES</p>
