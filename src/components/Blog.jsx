@@ -10,6 +10,16 @@ const mediumProfile = "https://medium.com/@breezesn";
 const articles = [
   {
     number: "01",
+    category: "DESIGN · AI · BUILD",
+    date: "2026",
+    title: "From Figma to Production with AI: A Designer’s Guide to Building and Deploying a Real Product",
+    summary: "A practical guide to taking a design beyond the canvas with AI, turning a Figma concept into a working product and getting it deployed.",
+    href: "https://medium.com/@breezesn/7deb95ad2930",
+    cover: "production",
+    coverLabel: ["DESIGN TO", "PRODUCTION"],
+  },
+  {
+    number: "02",
     category: "DESIGN · 3 MIN READ",
     date: "AUG 13, 2025",
     title: "The Art of Minimalism: Lessons from Fluent UI and Apple Design for Modern Interfaces",
@@ -19,7 +29,7 @@ const articles = [
     coverLabel: ["MAKE ROOM", "FOR WHAT MATTERS"],
   },
   {
-    number: "02",
+    number: "03",
     category: "PUBLICATION",
     date: "NOV 2026",
     title: "Hospital AI 2027: From Listening to Acting to Orchestrating",
@@ -29,7 +39,7 @@ const articles = [
     coverLabel: ["HOSPITAL AI", "2027"],
   },
   {
-    number: "03",
+    number: "06",
     category: "ARTICLE",
     date: "OCT 28, 2026",
     title: "Hospital AI Budget 2027: Where to Invest and How to Choose",
@@ -39,7 +49,7 @@ const articles = [
     coverLabel: ["BETTER", "ALLOCATION"],
   },
   {
-    number: "04",
+    number: "06",
     category: "ARTICLE",
     date: "OCT 28, 2026",
     title: "What Factors Influence Hospital Procurement Decisions for Surgical Analytics Platforms?",
@@ -49,7 +59,7 @@ const articles = [
     coverLabel: ["THE", "RIGHT TOOLS"],
   },
   {
-    number: "05",
+    number: "06",
     category: "ARTICLE",
     date: "JUN 9, 2026",
     title: "Time Management for Healthcare Professionals: Free AI-Avatar Course on SurgyLearn & YouTube",
