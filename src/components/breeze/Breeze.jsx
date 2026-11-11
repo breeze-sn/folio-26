@@ -116,7 +116,7 @@ function LocationMap() {
       </div>
       <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 flex items-end justify-between gap-3 bg-gradient-to-t from-white/90 via-white/55 to-transparent px-5 pb-5 pt-16">
         <div>
-          <p className="font-grotesk text-[10px] uppercase tracking-[0.16em] text-[#85847d]">15° N · 77° E</p>
+          <p className="font-grotesk text-[10px] uppercase tracking-[0.16em] text-[#85847d]">12.97° N · 77.59° E</p>
           <h2 className="mt-1 font-general text-xl font-semibold tracking-tight text-[#282823] sm:text-2xl">
             Bengaluru, India
           </h2>
