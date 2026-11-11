@@ -11,7 +11,7 @@ const articles = [
   {
     number: "01",
     category: "DESIGN · AI · BUILD",
-    date: "MEDIUM",
+    date: "NOV 11, 2026",
     title: "From Figma to Production with AI: A Designer’s Guide to Building and Deploying a Real Product",
     summary: "A practical guide to taking a design beyond the canvas with AI, turning a Figma concept into a working product and getting it deployed.",
     href: "https://medium.com/@breezesn/7deb95ad2930",
