@@ -9,7 +9,7 @@ function loadProjects() {
     // This file imports SVGs that Node cannot load without Vite, so read links
     // directly from the canonical project data instead of attempting an import.
     const file = fs.readFileSync(path.resolve("src/data.js"), "utf8");
-    const linkRegex = /link:\\s*['"]([^'"]+)['"]/g;
+    const linkRegex = /link:\s*['"]([^'"]+)['"]/g;
     const matches = [];
     let match;
 
@@ -39,7 +39,7 @@ async function build() {
       .map((p) => ({ loc: p.link, lastmod: formatDate() })),
   ];
 
-  const xml = [`<?xml version="1.0" encoding="UTF-8"?`, `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">`];
+  const xml = [`<?xml version="1.0" encoding="UTF-8"?>`, `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">`];
 
   for (const u of urls) {
     xml.push("  <url>");
