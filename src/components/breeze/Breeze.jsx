@@ -30,6 +30,7 @@ function BentoLink({ href, icon, title, detail, className = "", children }) {
 
 function LocationMap() {
   const mapContainer = useRef(null);
+  const [mapReady, setMapReady] = useState(false);
 
   useEffect(() => {
     let map;
@@ -51,7 +52,10 @@ function LocationMap() {
         const script = document.createElement("script");
         script.src = "https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js";
         script.async = true;
-        script.onload = () => resolve(window.maplibregl);
+        script.onload = () => {
+          if (window.maplibregl) resolve(window.maplibregl);
+          else reject(new Error("Map library loaded without its global API."));
+        };
         script.onerror = () => reject(new Error("Map library could not be loaded."));
         document.head.appendChild(script);
       });
@@ -85,7 +89,15 @@ function LocationMap() {
           .setLngLat([77.5946, 12.9716])
           .addTo(map);
 
-        map.once("load", () => map.resize());
+        map.once("load", () => {
+          if (cancelled) return;
+          map.resize();
+          setMapReady(true);
+        });
+
+        map.on("error", (event) => {
+          console.error("Breeze map tile/style error:", event.error || event);
+        });
       })
       .catch((error) => {
         console.error("Unable to initialise the Breeze location map:", error);
@@ -99,7 +111,21 @@ function LocationMap() {
 
   return (
     <article className="group relative isolate min-h-[22rem] overflow-hidden rounded-[1.75rem] border border-accent-100/20 bg-[#e9e8e2] md:col-span-2 md:row-span-2 md:min-h-[25rem]">
-      <div className="absolute inset-0"><div ref={mapContainer} className="h-full w-full" aria-label="Interactive map centred on Bengaluru" /></div>
+      {!mapReady && (
+        <iframe
+          title="Interactive map of Bengaluru"
+          src="https://maps.google.com/maps?q=Bengaluru%2C%20Karnataka%2C%20India&z=12&output=embed"
+          className="absolute inset-0 h-full w-full border-0"
+          loading="lazy"
+          referrerPolicy="no-referrer-when-downgrade"
+          allowFullScreen
+        />
+      )}
+      <div
+        ref={mapContainer}
+        className={`absolute inset-0 h-full w-full transition-opacity duration-300 ${mapReady ? "opacity-100" : "pointer-events-none opacity-0"}`}
+        aria-label="Interactive map centred on Bengaluru"
+      />
       <div className="pointer-events-none absolute inset-x-0 top-0 z-10 flex items-start justify-between p-5">
         <span className="rounded-full border border-white/70 bg-white/85 px-3 py-1.5 font-grotesk text-[10px] uppercase tracking-[0.16em] text-[#77766f] shadow-sm backdrop-blur">
           Currently around
