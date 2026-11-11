@@ -1,5 +1,5 @@
 import { Icon } from "@iconify/react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Me from "../../assets/images/Me-optimized.jpg";
 import Cursor from "../ui/Cursor";
 import Seo from "../ui/Seo";
@@ -24,6 +24,147 @@ function BentoLink({ href, icon, title, detail, className = "", children }) {
       </div>
       {children}
     </a>
+  );
+}
+
+
+function LocationMap() {
+  const mapContainer = useRef(null);
+
+  useEffect(() => {
+    let map;
+    let cancelled = false;
+
+    const loadMapLibre = () => {
+      if (window.maplibregl) return Promise.resolve(window.maplibregl);
+      if (window.__breezeMapLibrePromise) return window.__breezeMapLibrePromise;
+
+      window.__breezeMapLibrePromise = new Promise((resolve, reject) => {
+        if (!document.querySelector('link[data-breeze-maplibre]')) {
+          const stylesheet = document.createElement("link");
+          stylesheet.rel = "stylesheet";
+          stylesheet.href = "https://unpkg.com/maplibre-gl/dist/maplibre-gl.css";
+          stylesheet.dataset.breezeMaplibre = "true";
+          document.head.appendChild(stylesheet);
+        }
+
+        const script = document.createElement("script");
+        script.src = "https://unpkg.com/maplibre-gl/dist/maplibre-gl.js";
+        script.async = true;
+        script.onload = () => resolve(window.maplibregl);
+        script.onerror = () => reject(new Error("Map library could not be loaded."));
+        document.head.appendChild(script);
+      });
+
+      return window.__breezeMapLibrePromise;
+    };
+
+    loadMapLibre()
+      .then((maplibregl) => {
+        if (cancelled || !mapContainer.current || !maplibregl) return;
+
+        map = new maplibregl.Map({
+          container: mapContainer.current,
+          style: "https://basemaps.cartocdn.com/gl/positron-gl-style/style.json",
+          center: [77.5946, 12.9716],
+          zoom: 11.5,
+          attributionControl: true,
+          cooperativeGestures: true,
+        });
+
+        map.addControl(
+          new maplibregl.NavigationControl({ showCompass: false, visualizePitch: false }),
+          "bottom-right"
+        );
+
+        const marker = document.createElement("div");
+        marker.className = "breeze-map-marker";
+        marker.setAttribute("aria-label", "Bengaluru");
+
+        new maplibregl.Marker({ element: marker, anchor: "center" })
+          .setLngLat([77.5946, 12.9716])
+          .addTo(map);
+
+        map.once("load", () => map.resize());
+      })
+      .catch((error) => {
+        console.error("Unable to initialise the Breeze location map:", error);
+      });
+
+    return () => {
+      cancelled = true;
+      if (map) map.remove();
+    };
+  }, []);
+
+  return (
+    <article className="group relative isolate min-h-[22rem] overflow-hidden rounded-[1.75rem] border border-accent-100/20 bg-[#e9e8e2] md:col-span-2 md:row-span-2 md:min-h-[25rem]">
+      <div ref={mapContainer} className="absolute inset-0" aria-label="Interactive map centred on Bengaluru" />
+      <div className="pointer-events-none absolute inset-x-0 top-0 z-10 flex items-start justify-between p-5">
+        <span className="rounded-full border border-white/70 bg-white/85 px-3 py-1.5 font-grotesk text-[10px] uppercase tracking-[0.16em] text-[#77766f] shadow-sm backdrop-blur">
+          Currently around
+        </span>
+        <a
+          href="https://www.google.com/maps/search/?api=1&query=Bengaluru%2C+Karnataka%2C+India"
+          target="_blank"
+          rel="noreferrer"
+          aria-label="Open Bengaluru in Google Maps"
+          className="pointer-events-auto flex h-9 w-9 items-center justify-center rounded-full border border-white/70 bg-white/85 text-[#55554f] shadow-sm backdrop-blur transition hover:-translate-y-0.5 hover:bg-white"
+        >
+          <Icon icon="lucide:arrow-up-right" className="text-lg" />
+        </a>
+      </div>
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 flex items-end justify-between gap-3 bg-gradient-to-t from-white/90 via-white/55 to-transparent px-5 pb-5 pt-16">
+        <div>
+          <p className="font-grotesk text-[10px] uppercase tracking-[0.16em] text-[#85847d]">15° N · 77° E</p>
+          <h2 className="mt-1 font-general text-xl font-semibold tracking-tight text-[#282823] sm:text-2xl">
+            Bengaluru, India
+          </h2>
+        </div>
+        <span className="mb-0.5 rounded-full border border-[#d9d8d1] bg-white/75 px-3 py-1.5 font-grotesk text-[10px] text-[#77766f] backdrop-blur">
+          <span className="mr-1.5 inline-block h-1.5 w-1.5 rounded-full bg-[#4778e8] align-middle" />
+          Based here
+        </span>
+      </div>
+      <style>{`
+        .breeze-map-marker {
+          position: relative;
+          width: 16px;
+          height: 16px;
+          border: 3px solid #fff;
+          border-radius: 9999px;
+          background: #4778e8;
+          box-shadow: 0 1px 8px rgba(37, 75, 155, 0.3);
+        }
+        .breeze-map-marker::before {
+          content: "";
+          position: absolute;
+          inset: -10px;
+          border: 1px solid rgba(71, 120, 232, 0.48);
+          border-radius: 9999px;
+          background: rgba(71, 120, 232, 0.12);
+          animation: breeze-map-pulse 2.4s ease-out infinite;
+        }
+        @keyframes breeze-map-pulse {
+          0% { transform: scale(0.65); opacity: 0.85; }
+          100% { transform: scale(1.55); opacity: 0; }
+        }
+        .maplibregl-ctrl-group {
+          overflow: hidden;
+          border: 1px solid rgba(255,255,255,.8) !important;
+          border-radius: 12px !important;
+          box-shadow: 0 2px 12px rgba(35,35,30,.08) !important;
+        }
+        .maplibregl-ctrl-group button {
+          cursor: pointer;
+        }
+        .maplibregl-ctrl-attrib {
+          font-size: 9px !important;
+          background: rgba(255,255,255,.72) !important;
+          backdrop-filter: blur(8px);
+        }
+      `}</style>
+    </article>
   );
 }
 
@@ -343,6 +484,7 @@ export default function Breeze() {
             detail="Professional life"
             className="col-span-2 bg-primary-100"
           />
+          <LocationMap />
           <BentoLink
             href="https://www.behance.net/simrannagekar"
             icon="mdi:behance"
