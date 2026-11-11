@@ -99,7 +99,7 @@ function LocationMap() {
 
   return (
     <article className="group relative isolate min-h-[22rem] overflow-hidden rounded-[1.75rem] border border-accent-100/20 bg-[#e9e8e2] md:col-span-2 md:row-span-2 md:min-h-[25rem]">
-      <div ref={mapContainer} className="absolute inset-0" aria-label="Interactive map centred on Bengaluru" />
+      <div className="absolute inset-0"><div ref={mapContainer} className="h-full w-full" aria-label="Interactive map centred on Bengaluru" /></div>
       <div className="pointer-events-none absolute inset-x-0 top-0 z-10 flex items-start justify-between p-5">
         <span className="rounded-full border border-white/70 bg-white/85 px-3 py-1.5 font-grotesk text-[10px] uppercase tracking-[0.16em] text-[#77766f] shadow-sm backdrop-blur">
           Currently around
