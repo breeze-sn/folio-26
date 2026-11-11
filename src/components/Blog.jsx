@@ -1,6 +1,8 @@
 import { Icon } from "@iconify/react";
 import Seo from "./ui/Seo";
 import NavBar from "./ui/NavBar";
+import Cursor from "./ui/Cursor";
+import Footer from "./ui/Footer";
 import "../blog.css";
 
 const mediumProfile = "https://medium.com/@breezesn";
@@ -22,6 +24,8 @@ const articles = [
     date: "NOV 2026",
     title: "Hospital AI 2027: From Listening to Acting to Orchestrating",
     href: "https://surgy.health/hospital-ai-2027.pdf",
+    cover: "report",
+    coverLabel: ["HOSPITAL AI", "2027"],
   },
   {
     number: "03",
@@ -29,6 +33,8 @@ const articles = [
     date: "OCT 28, 2026",
     title: "Hospital AI Budget 2027: Where to Invest and How to Choose",
     href: "https://surgy.health/blog/ai-resource-allocation-hospitals-2027",
+    cover: "allocation",
+    coverLabel: ["BETTER", "ALLOCATION"],
   },
   {
     number: "04",
@@ -36,6 +42,8 @@ const articles = [
     date: "OCT 28, 2026",
     title: "What Factors Influence Hospital Procurement Decisions for Surgical Analytics Platforms?",
     href: "https://surgy.health/blog/hospital-procurement-surgical-analytics-platforms",
+    cover: "procurement",
+    coverLabel: ["THE", "RIGHT TOOLS"],
   },
   {
     number: "05",
@@ -43,6 +51,8 @@ const articles = [
     date: "JUN 9, 2026",
     title: "Time Management for Healthcare Professionals: Free AI-Avatar Course on SurgyLearn & YouTube",
     href: "https://surgy.health/blog/surgylearn-time-management-for-healthcare-professionals-2026",
+    cover: "learning",
+    coverLabel: ["MAKE TIME", "WORK BETTER"],
   },
 ];
 
@@ -81,6 +91,7 @@ function ArticleCard({ article, total }) {
 export default function Blog() {
   return (
     <div className="blog-page flex min-h-screen flex-col bg-secondary-100 text-accent-300">
+      <Cursor />
       <Seo title="Writing" url="https://simransn.vercel.app/blog" robots="noindex, nofollow" />
       <NavBar isSubpage />
       <main className="blog-main mx-auto flex w-full max-w-6xl flex-1 flex-col px-5 sm:px-8 xl:px-10">
@@ -109,13 +120,8 @@ export default function Blog() {
           <div className="grid gap-5 md:grid-cols-2 md:gap-6">{articles.map((article) => <ArticleCard key={article.number} article={article} total={articles.length} />)}</div>
         </section>
 
-        <footer className="mt-8 flex flex-col gap-3 border-t border-accent-100/25 py-6 font-grotesk text-xs text-accent-100 sm:mt-10 sm:flex-row sm:items-center sm:justify-between">
-          <div className="mx-auto flex w-full max-w-6xl flex-col justify-between gap-2 sm:flex-row sm:items-center sm:gap-4">
-          <span>© 2026 SIMRAN NAGEKAR</span>
-          <a href={mediumProfile} target="_blank" rel="noreferrer" className="inline-flex w-fit items-center gap-2 text-accent-300 transition-colors hover:text-secondary-600">Follow along on Medium <Icon icon="ph:arrow-up-right" /></a>
-          </div>
-        </footer>
-      </main>
+        </main>
+      <Footer />
     </div>
   );
 }
