@@ -43,13 +43,13 @@ function LocationMap() {
         if (!document.querySelector('link[data-breeze-maplibre]')) {
           const stylesheet = document.createElement("link");
           stylesheet.rel = "stylesheet";
-          stylesheet.href = "https://unpkg.com/maplibre-gl/dist/maplibre-gl.css";
+          stylesheet.href = "https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css";
           stylesheet.dataset.breezeMaplibre = "true";
           document.head.appendChild(stylesheet);
         }
 
         const script = document.createElement("script");
-        script.src = "https://unpkg.com/maplibre-gl/dist/maplibre-gl.js";
+        script.src = "https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js";
         script.async = true;
         script.onload = () => resolve(window.maplibregl);
         script.onerror = () => reject(new Error("Map library could not be loaded."));
