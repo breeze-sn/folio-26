@@ -164,7 +164,11 @@ function LocationMap() {
           0% { transform: scale(0.65); opacity: 0.85; }
           100% { transform: scale(1.55); opacity: 0; }
         }
-        .breeze-flying-plane {\n          top: 30%;\n          left: 56%;\n          animation: breeze-plane-drift 13s ease-in-out infinite;\n        }\n        @keyframes breeze-plane-drift {\n          0%, 100% { transform: translate(0, 0) rotate(24deg); }\n          25% { transform: translate(76px, -38px) rotate(48deg); }\n          50% { transform: translate(142px, 32px) rotate(112deg); }\n          75% { transform: translate(64px, 78px) rotate(190deg); }\n        }\n        @media (prefers-reduced-motion: reduce) { .breeze-flying-plane { animation: none; } }\n        .maplibregl-ctrl-group {
+        .breeze-flying-plane {
+          top: 30%;
+          left: 56%;
+          animation: breeze-plane-drift 13s ease-in-out infinite;
+        }\n        @keyframes breeze-plane-drift {\n          0%, 100% { transform: translate(0, 0) rotate(24deg); }\n          25% { transform: translate(76px, -38px) rotate(48deg); }\n          50% { transform: translate(142px, 32px) rotate(112deg); }\n          75% { transform: translate(64px, 78px) rotate(190deg); }\n        }\n        @media (prefers-reduced-motion: reduce) { .breeze-flying-plane { animation: none; } }\n        .maplibregl-ctrl-group {
           overflow: hidden;
           border: 1px solid rgba(255,255,255,.8) !important;
           border-radius: 12px !important;
