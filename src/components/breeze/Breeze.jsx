@@ -30,7 +30,6 @@ function BentoLink({ href, icon, title, detail, className = "", children }) {
 
 function LocationMap() {
   const mapContainer = useRef(null);
-  const [mapReady, setMapReady] = useState(false);
 
   useEffect(() => {
     let map;
@@ -92,7 +91,6 @@ function LocationMap() {
         map.once("load", () => {
           if (cancelled) return;
           map.resize();
-          setMapReady(true);
         });
 
         map.on("error", (event) => {
@@ -111,34 +109,25 @@ function LocationMap() {
 
   return (
     <article className="group relative isolate min-h-[22rem] overflow-hidden rounded-[1.75rem] border border-accent-100/20 bg-[#e9e8e2] md:col-span-2 md:row-span-2 md:min-h-[25rem]">
-      {!mapReady && (
-        <iframe
-          title="Interactive map of Bengaluru"
-          src="https://maps.google.com/maps?q=Bengaluru%2C%20Karnataka%2C%20India&z=12&output=embed"
-          className="absolute inset-0 h-full w-full border-0"
-          loading="lazy"
-          referrerPolicy="no-referrer-when-downgrade"
-          allowFullScreen
-        />
-      )}
       <div
         ref={mapContainer}
-        className={`absolute inset-0 h-full w-full transition-opacity duration-300 ${mapReady ? "opacity-100" : "pointer-events-none opacity-0"}`}
+        className="absolute inset-0 h-full w-full"
         aria-label="Interactive map centred on Bengaluru"
       />
       <div className="pointer-events-none absolute inset-x-0 top-0 z-10 flex items-start justify-between p-5">
         <span className="rounded-full border border-white/70 bg-white/85 px-3 py-1.5 font-grotesk text-[10px] uppercase tracking-[0.16em] text-[#77766f] shadow-sm backdrop-blur">
-          Currently around
+          A little dot on the map
         </span>
-        <a
-          href="https://www.google.com/maps/search/?api=1&query=Bengaluru%2C+Karnataka%2C+India"
-          target="_blank"
-          rel="noreferrer"
-          aria-label="Open Bengaluru in Google Maps"
-          className="pointer-events-auto flex h-9 w-9 items-center justify-center rounded-full border border-white/70 bg-white/85 text-[#55554f] shadow-sm backdrop-blur transition hover:-translate-y-0.5 hover:bg-white"
-        >
-          <Icon icon="lucide:arrow-up-right" className="text-lg" />
-        </a>
+        <span className="rounded-full border border-white/70 bg-white/85 px-3 py-1.5 font-grotesk text-[10px] text-[#77766f] shadow-sm backdrop-blur">
+          <span className="mr-1.5 inline-block h-1.5 w-1.5 rounded-full bg-[#4778e8] align-middle" />
+          〰 in motion
+        </span>
+      </div>
+      <svg className="breeze-flight-path pointer-events-none absolute inset-0 z-[5] h-full w-full" viewBox="0 0 600 400" preserveAspectRatio="none" aria-hidden="true">
+        <path d="M 330 115 C 420 45, 555 95, 505 190 C 470 260, 365 255, 330 190" fill="none" stroke="rgba(71,120,232,.55)" strokeWidth="1.5" strokeDasharray="4 7" />
+      </svg>
+      <div className="breeze-flying-plane pointer-events-none absolute z-[6] flex h-8 w-8 items-center justify-center rounded-full border border-white/80 bg-white/90 text-[#4778e8] shadow-[0_3px_12px_rgba(45,70,130,.14)]" aria-hidden="true">
+        <Icon icon="lucide:plane" className="text-base" />
       </div>
       <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 flex items-end justify-between gap-3 bg-gradient-to-t from-white/90 via-white/55 to-transparent px-5 pb-5 pt-16">
         <div>
@@ -175,7 +164,7 @@ function LocationMap() {
           0% { transform: scale(0.65); opacity: 0.85; }
           100% { transform: scale(1.55); opacity: 0; }
         }
-        .maplibregl-ctrl-group {
+        .breeze-flying-plane {\n          top: 30%;\n          left: 56%;\n          animation: breeze-plane-drift 13s ease-in-out infinite;\n        }\n        @keyframes breeze-plane-drift {\n          0%, 100% { transform: translate(0, 0) rotate(24deg); }\n          25% { transform: translate(76px, -38px) rotate(48deg); }\n          50% { transform: translate(142px, 32px) rotate(112deg); }\n          75% { transform: translate(64px, 78px) rotate(190deg); }\n        }\n        @media (prefers-reduced-motion: reduce) { .breeze-flying-plane { animation: none; } }\n        .maplibregl-ctrl-group {
           overflow: hidden;
           border: 1px solid rgba(255,255,255,.8) !important;
           border-radius: 12px !important;
