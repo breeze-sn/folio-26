@@ -116,15 +116,14 @@ export default function Blog() {
           </div>
         </section>
 
-        <section id="blog-articles" className="flex-1 py-12 sm:py-16" aria-labelledby="selected-writing">
-          <div className="mb-7 flex items-end justify-between gap-4 sm:mb-9">
+        <section id="blog-articles" className="flex-1 py-8 sm:py-10" aria-labelledby="selected-writing">
+          <div className="mb-5 flex items-end justify-between gap-4">
             <div><h2 id="selected-writing" className="font-general text-3xl font-semibold tracking-[-0.05em] sm:text-4xl">From the notebook</h2></div>
             <span className="pb-1 font-grotesk text-xs text-accent-100">{String(articles.length).padStart(2, "0")} ARTICLES</span>
           </div>
-          <div className="grid gap-5 md:grid-cols-2 md:gap-6">{articles.map((article) => <ArticleCard key={article.number} article={article} total={articles.length} />)}</div>
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">{articles.map((article) => <ArticleCard key={article.number} article={article} total={articles.length} />)}</div>
         </section>
-
-        </main>
+      </main>
       <Footer />
     </div>
   );
